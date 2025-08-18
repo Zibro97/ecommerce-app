@@ -1,4 +1,4 @@
-package com.zibro.ecommerce
+package com.zibro.ecommerce.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
