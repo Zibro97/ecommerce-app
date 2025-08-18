@@ -1,10 +1,12 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
-    namespace = "com.zibro.ecommerce.di"
+    namespace = "com.zibro.ecommerce.presentation"
     compileSdk = 36
 
     defaultConfig {
@@ -36,6 +38,10 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":app"))
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

@@ -1,4 +1,4 @@
-package com.zibro.ecommerce.di
+package com.zibro.ecommerce.presentation
 
 import org.junit.Test
 

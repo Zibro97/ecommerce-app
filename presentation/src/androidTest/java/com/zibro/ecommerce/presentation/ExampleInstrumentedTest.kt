@@ -1,4 +1,4 @@
-package com.zibro.ecommerce.di
+package com.zibro.ecommerce.presentation
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
