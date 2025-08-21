@@ -30,7 +30,6 @@ import com.zibro.ecommerce.domain.model.Product
 import com.zibro.ecommerce.domain.model.SalesStatus
 import com.zibro.ecommerce.domain.model.Shop
 import com.zibro.ecommerce.presentation.R
-import com.zibro.ecommerce.presentation.ui.theme.Purple40
 import com.zibro.ecommerce.presentation.ui.theme.Purple80
 
 @Composable

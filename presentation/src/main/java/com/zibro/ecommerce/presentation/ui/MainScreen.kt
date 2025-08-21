@@ -1,6 +1,5 @@
 package com.zibro.ecommerce.presentation.ui
 
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -30,6 +29,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.zibro.ecommerce.presentation.ui.main.MainInsideScreen
 import com.zibro.ecommerce.presentation.ui.theme.EcommerceAppTheme
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
 
@@ -64,7 +64,7 @@ fun MainScreen() {
             MainBottomNavigationBar(navController)
         }
     ) { innerPadding ->
-        MainNavigationScreen(navController, innerPadding)
+        MainNavigationScreen(viewModel,navController, innerPadding)
     }
 }
 
@@ -120,14 +120,18 @@ fun MainBottomNavigationBar(navController : NavHostController) {
 }
 
 @Composable
-fun MainNavigationScreen(navController : NavHostController, innerPadding : PaddingValues) {
+fun MainNavigationScreen(
+    mainViewModel: MainViewModel,
+    navController : NavHostController,
+    innerPadding : PaddingValues
+) {
     NavHost(
         modifier = Modifier.padding(innerPadding),
         navController = navController,
         startDestination = MainNavigationItem.Main.route,
     ) {
         composable(MainNavigationItem.Main.route) {
-            Text("메인 화면")
+            MainInsideScreen(viewModel = mainViewModel)
         }
         composable(MainNavigationItem.Category.route) {
             Text("카테고리 화면")
