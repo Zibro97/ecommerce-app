@@ -14,6 +14,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val viewModel : MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -27,5 +29,21 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        viewModel.updateColumnCount(getColumnCount())
+    }
+
+    private fun getColumnCount() : Int {
+        return getDisplayWidthDp().toInt() / DEFAULT_COLUMN_SIZE
+    }
+
+    // 현재 기기의 디스플레이 너비 dp값
+    private fun getDisplayWidthDp() : Float {
+        return resources.displayMetrics.run {
+            widthPixels / density
+        }
+    }
+
+    companion object {
+        private const val DEFAULT_COLUMN_SIZE = 120
     }
 }
