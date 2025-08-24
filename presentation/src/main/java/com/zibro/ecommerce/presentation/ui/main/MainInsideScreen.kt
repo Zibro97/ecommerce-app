@@ -1,27 +1,79 @@
 package com.zibro.ecommerce.presentation.ui.main
 
-import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.zibro.ecommerce.domain.model.Banner
+import com.zibro.ecommerce.domain.model.ModelType
+import com.zibro.ecommerce.domain.model.Product
+import com.zibro.ecommerce.presentation.R
 import com.zibro.ecommerce.presentation.common.ProductCard
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
 
 @Composable
 fun MainInsideScreen(viewModel: MainViewModel) {
-    val productList by viewModel.productList.collectAsState(initial = listOf())
+    val modelList by viewModel.modelList.collectAsState(initial = listOf())
     val columnCount by viewModel.columnCount.collectAsState()
 
     LazyVerticalGrid(
         GridCells.Fixed(columnCount)
     ) {
-        items(productList.size) {
-            Log.d("zibro", "MainInsideScreen: $productList")
-            ProductCard(product = productList[it]) {
-                // TODO: 상세 화면 개발 시 추가
+        items(
+            modelList.size,
+            span = { index ->
+                val item = modelList[index]
+                val spanCount = getSpanCountByType(item.type, columnCount)
+                GridItemSpan(spanCount)
+            }
+        ) {
+            when (val item = modelList[it]) {
+                is Banner -> BannerCard(model = item)
+                is Product -> ProductCard(product = item) {
+                    // TODO: 상세 화면 개발 시 추가
+                }
             }
         }
+    }
+}
+
+private fun getSpanCountByType(type: ModelType, defaultColumnCount: Int): Int {
+    return when(type) {
+        ModelType.PRODUCT -> 1
+        ModelType.BANNER -> defaultColumnCount
+        ModelType.RANKING -> defaultColumnCount
+    }
+}
+
+@Composable
+fun BannerCard(model : Banner) {
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+            .shadow(20.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.product_image),
+            "description",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxWidth()
+                .aspectRatio(2f)
+        )
+
     }
 }

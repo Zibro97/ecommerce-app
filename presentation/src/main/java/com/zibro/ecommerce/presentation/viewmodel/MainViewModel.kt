@@ -16,7 +16,7 @@ class MainViewModel @Inject constructor(
     private val _columnCount = MutableStateFlow(DEFAULT_COLUMN_COUNT)
     val columnCount : StateFlow<Int> = _columnCount
 
-    val productList = useCase()
+    val modelList = useCase()
 
     fun openSearchForm() {
 
