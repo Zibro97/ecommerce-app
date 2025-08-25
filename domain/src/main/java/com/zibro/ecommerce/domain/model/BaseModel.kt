@@ -8,5 +8,6 @@ enum class ModelType {
     PRODUCT,
     BANNER,
     BANNER_LIST,
-    RANKING
+    RANKING,
+    CAROUSEL
 }

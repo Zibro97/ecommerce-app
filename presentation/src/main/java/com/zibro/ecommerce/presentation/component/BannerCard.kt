@@ -16,13 +16,14 @@ import com.zibro.ecommerce.domain.model.Banner
 import com.zibro.ecommerce.presentation.R
 
 @Composable
-fun BannerCard(model : Banner) {
+fun BannerCard(model : Banner, onClick: (Banner) -> Unit) {
     Card(
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
-            .shadow(20.dp)
+            .shadow(20.dp),
+        onClick = { onClick(model) }
     ) {
         Image(
             painter = painterResource(id = R.drawable.product_image),

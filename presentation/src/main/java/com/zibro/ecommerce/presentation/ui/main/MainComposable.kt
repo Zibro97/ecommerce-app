@@ -12,18 +12,14 @@ import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import com.zibro.ecommerce.domain.model.Banner
 import com.zibro.ecommerce.domain.model.BannerList
+import com.zibro.ecommerce.domain.model.Carousel
 import com.zibro.ecommerce.domain.model.ModelType
 import com.zibro.ecommerce.domain.model.Product
-import com.zibro.ecommerce.presentation.R
 import com.zibro.ecommerce.presentation.component.BannerCard
 import com.zibro.ecommerce.presentation.component.BannerListCard
+import com.zibro.ecommerce.presentation.component.CarouselCard
 import com.zibro.ecommerce.presentation.component.ProductCard
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
 
@@ -44,11 +40,18 @@ fun MainInsideScreen(viewModel: MainViewModel) {
             }
         ) {
             when (val item = modelList[it]) {
-                is Banner -> BannerCard(model = item)
-                is Product -> ProductCard(product = item) {
-                    // TODO: 상세 화면 개발 시 추가
+                is Banner -> BannerCard(model = item) { model ->
+                    viewModel.openBanner(model)
                 }
-                is BannerList -> BannerListCard(model = item)
+                is Product -> ProductCard(product = item) { model ->
+                    viewModel.openProduct(model)
+                }
+                is BannerList -> BannerListCard(model = item) { model ->
+                    viewModel.openBannerList(model)
+                }
+                is Carousel -> CarouselCard(model = item) { model ->
+                    viewModel.openCarouselProduct(model)
+                }
             }
         }
     }
@@ -57,7 +60,7 @@ fun MainInsideScreen(viewModel: MainViewModel) {
 private fun getSpanCountByType(type: ModelType, defaultColumnCount: Int): Int {
     return when(type) {
         ModelType.PRODUCT -> 1
-        ModelType.BANNER, ModelType.BANNER_LIST -> defaultColumnCount
+        ModelType.BANNER, ModelType.BANNER_LIST, ModelType.CAROUSEL -> defaultColumnCount
         ModelType.RANKING -> defaultColumnCount
     }
 }

@@ -2,6 +2,9 @@ package com.zibro.ecommerce.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zibro.ecommerce.domain.model.Banner
+import com.zibro.ecommerce.domain.model.BannerList
+import com.zibro.ecommerce.domain.model.Product
 import com.zibro.ecommerce.domain.usecase.MainUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +29,22 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             _columnCount.emit(count)
         }
+    }
+
+    fun openProduct(product: Product) {
+
+    }
+
+    fun openCarouselProduct(product: Product) {
+
+    }
+
+    fun openBanner(banner: Banner) {
+
+    }
+
+    fun openBannerList(bannerList: BannerList) {
+
     }
 
     companion object {

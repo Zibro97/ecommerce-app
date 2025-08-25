@@ -24,7 +24,7 @@ import com.zibro.ecommerce.presentation.R
 import kotlinx.coroutines.delay
 
 @Composable
-fun BannerListCard(model : BannerList) {
+fun BannerListCard(model : BannerList, onClick: (BannerList) -> Unit) {
     val pagerState = rememberPagerState()
     LaunchedEffect(key1 = pagerState) {
         autoScrollInfinity(pagerState)
@@ -35,7 +35,8 @@ fun BannerListCard(model : BannerList) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
-                .shadow(20.dp)
+                .shadow(20.dp),
+            onClick = { onClick(model) }
         ) {
             Image(
                 painter = painterResource(id = R.drawable.product_image),
