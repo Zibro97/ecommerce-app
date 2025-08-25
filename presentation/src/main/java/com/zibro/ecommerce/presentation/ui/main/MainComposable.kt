@@ -18,10 +18,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.zibro.ecommerce.domain.model.Banner
+import com.zibro.ecommerce.domain.model.BannerList
 import com.zibro.ecommerce.domain.model.ModelType
 import com.zibro.ecommerce.domain.model.Product
 import com.zibro.ecommerce.presentation.R
-import com.zibro.ecommerce.presentation.common.ProductCard
+import com.zibro.ecommerce.presentation.component.BannerCard
+import com.zibro.ecommerce.presentation.component.BannerListCard
+import com.zibro.ecommerce.presentation.component.ProductCard
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
 
 @Composable
@@ -45,6 +48,7 @@ fun MainInsideScreen(viewModel: MainViewModel) {
                 is Product -> ProductCard(product = item) {
                     // TODO: 상세 화면 개발 시 추가
                 }
+                is BannerList -> BannerListCard(model = item)
             }
         }
     }
@@ -53,27 +57,7 @@ fun MainInsideScreen(viewModel: MainViewModel) {
 private fun getSpanCountByType(type: ModelType, defaultColumnCount: Int): Int {
     return when(type) {
         ModelType.PRODUCT -> 1
-        ModelType.BANNER -> defaultColumnCount
+        ModelType.BANNER, ModelType.BANNER_LIST -> defaultColumnCount
         ModelType.RANKING -> defaultColumnCount
-    }
-}
-
-@Composable
-fun BannerCard(model : Banner) {
-    Card(
-        shape = RoundedCornerShape(12.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
-            .shadow(20.dp)
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.product_image),
-            "description",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxWidth()
-                .aspectRatio(2f)
-        )
-
     }
 }

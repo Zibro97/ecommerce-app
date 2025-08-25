@@ -5,6 +5,7 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.zibro.ecommerce.domain.model.Banner
+import com.zibro.ecommerce.domain.model.BannerList
 import com.zibro.ecommerce.domain.model.BaseModel
 import com.zibro.ecommerce.domain.model.ModelType
 import com.zibro.ecommerce.domain.model.Product
@@ -30,6 +31,7 @@ class BaseModelDeserializer : JsonDeserializer<BaseModel> {
             ModelType.PRODUCT -> gson.fromJson(root, Product::class.java)
             ModelType.BANNER -> gson.fromJson(root, Banner::class.java)
             ModelType.RANKING -> gson.fromJson(root, Banner::class.java)
+            ModelType.BANNER_LIST -> gson.fromJson(root, BannerList::class.java)
         }
     }
 }
