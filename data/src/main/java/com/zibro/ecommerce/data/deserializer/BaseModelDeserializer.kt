@@ -10,6 +10,7 @@ import com.zibro.ecommerce.domain.model.BaseModel
 import com.zibro.ecommerce.domain.model.Carousel
 import com.zibro.ecommerce.domain.model.ModelType
 import com.zibro.ecommerce.domain.model.Product
+import com.zibro.ecommerce.domain.model.Ranking
 import java.lang.reflect.Type
 
 class BaseModelDeserializer : JsonDeserializer<BaseModel> {
@@ -31,7 +32,7 @@ class BaseModelDeserializer : JsonDeserializer<BaseModel> {
         return when(ModelType.valueOf(typeString)) {
             ModelType.PRODUCT -> gson.fromJson(root, Product::class.java)
             ModelType.BANNER -> gson.fromJson(root, Banner::class.java)
-            ModelType.RANKING -> gson.fromJson(root, Banner::class.java)
+            ModelType.RANKING -> gson.fromJson(root, Ranking::class.java)
             ModelType.BANNER_LIST -> gson.fromJson(root, BannerList::class.java)
             ModelType.CAROUSEL -> gson.fromJson(root, Carousel::class.java)
         }

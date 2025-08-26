@@ -17,10 +17,12 @@ import com.zibro.ecommerce.domain.model.BannerList
 import com.zibro.ecommerce.domain.model.Carousel
 import com.zibro.ecommerce.domain.model.ModelType
 import com.zibro.ecommerce.domain.model.Product
+import com.zibro.ecommerce.domain.model.Ranking
 import com.zibro.ecommerce.presentation.component.BannerCard
 import com.zibro.ecommerce.presentation.component.BannerListCard
 import com.zibro.ecommerce.presentation.component.CarouselCard
 import com.zibro.ecommerce.presentation.component.ProductCard
+import com.zibro.ecommerce.presentation.component.RankingCard
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
 
 @Composable
@@ -51,6 +53,9 @@ fun MainInsideScreen(viewModel: MainViewModel) {
                 }
                 is Carousel -> CarouselCard(model = item) { model ->
                     viewModel.openCarouselProduct(model)
+                }
+                is Ranking -> RankingCard(model = item) { model ->
+                    viewModel.openRanking(model)
                 }
             }
         }

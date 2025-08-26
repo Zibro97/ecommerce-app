@@ -1,0 +1,89 @@
+package com.zibro.ecommerce.presentation.component
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
+import com.zibro.ecommerce.domain.model.Product
+import com.zibro.ecommerce.domain.model.Ranking
+import com.zibro.ecommerce.presentation.R
+
+private const val DEFAULT_RANKING_ITEM_COUNT = 3
+
+@Composable
+fun RankingCard(model: Ranking, onClick: (Ranking) -> Unit) {
+    val pagerState = rememberPagerState()
+    val pageCount = model.productList.size / DEFAULT_RANKING_ITEM_COUNT
+
+    Column {
+        Text(
+            text = model.title,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
+        )
+        HorizontalPager(
+            count = pageCount,
+            state = pagerState,
+            contentPadding = PaddingValues(end = 50.dp)
+        ) { idx ->
+            Column {
+                RankingProductCard(index = idx * 3, product = model.productList[idx * 3], onClick)
+                RankingProductCard(index = idx * 3 + 1, product = model.productList[idx * 3 + 1], onClick)
+                RankingProductCard(index = idx * 3 + 2, product = model.productList[idx * 3 + 2], onClick)
+            }
+        }
+    }
+}
+
+@Composable
+fun RankingProductCard(index: Int, product: Product, onClick: (Ranking) -> Unit) {
+    Row(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth()
+    ) {
+        Text(
+            text = "${index+1}",
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 10.dp)
+        )
+        Image(
+            painter = painterResource(R.drawable.product_image),
+            "description",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .width(70.dp)
+                .aspectRatio(0.7f)
+        )
+        Column(modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)) {
+            Text(
+                fontSize = 14.sp,
+                text = product.shop.shopName,
+                modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)
+            )
+
+            Text(
+                fontSize = 14.sp,
+                text = product.productName,
+                modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)
+            )
+
+            Price(product = product)
+        }
+    }
+}
