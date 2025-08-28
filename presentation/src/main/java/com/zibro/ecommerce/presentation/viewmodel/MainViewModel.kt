@@ -6,6 +6,7 @@ import com.zibro.ecommerce.domain.model.Banner
 import com.zibro.ecommerce.domain.model.BannerList
 import com.zibro.ecommerce.domain.model.Product
 import com.zibro.ecommerce.domain.model.Ranking
+import com.zibro.ecommerce.domain.usecase.CategoryUseCase
 import com.zibro.ecommerce.domain.usecase.MainUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,12 +16,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    useCase: MainUseCase
+    mainUseCase: MainUseCase,
+    categoryUseCase: CategoryUseCase,
 ) : ViewModel() {
     private val _columnCount = MutableStateFlow(DEFAULT_COLUMN_COUNT)
     val columnCount : StateFlow<Int> = _columnCount
 
-    val modelList = useCase()
+    val modelList = mainUseCase()
+    val categoryList = categoryUseCase()
 
     fun openSearchForm() {
 

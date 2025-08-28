@@ -1,14 +1,8 @@
-package com.zibro.ecommerce.presentation.ui.main
+package com.zibro.ecommerce.presentation.ui.home
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,7 +20,7 @@ import com.zibro.ecommerce.presentation.component.RankingCard
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
 
 @Composable
-fun MainInsideScreen(viewModel: MainViewModel) {
+fun HomeScreen(viewModel: MainViewModel) {
     val modelList by viewModel.modelList.collectAsState(initial = listOf())
     val columnCount by viewModel.columnCount.collectAsState()
 

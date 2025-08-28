@@ -29,7 +29,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.zibro.ecommerce.presentation.ui.main.MainInsideScreen
+import com.zibro.ecommerce.presentation.ui.home.CategoryScreen
+import com.zibro.ecommerce.presentation.ui.home.HomeScreen
 import com.zibro.ecommerce.presentation.ui.theme.EcommerceAppTheme
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
 
@@ -131,10 +132,10 @@ fun MainNavigationScreen(
         startDestination = MainNavigationItem.Main.route,
     ) {
         composable(MainNavigationItem.Main.route) {
-            MainInsideScreen(viewModel = mainViewModel)
+            HomeScreen(viewModel = mainViewModel)
         }
         composable(MainNavigationItem.Category.route) {
-            Text("카테고리 화면")
+            CategoryScreen(viewModel = mainViewModel)
         }
         composable(MainNavigationItem.MyPage.route) {
             Text("마이페이지 화면")
