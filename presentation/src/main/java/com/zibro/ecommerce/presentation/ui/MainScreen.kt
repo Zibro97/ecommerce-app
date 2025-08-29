@@ -3,10 +3,7 @@ package com.zibro.ecommerce.presentation.ui
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,28 +18,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.zibro.ecommerce.presentation.ui.home.CategoryScreen
-import com.zibro.ecommerce.presentation.ui.home.HomeScreen
+import androidx.navigation.navArgument
+import com.google.gson.Gson
+import com.zibro.ecommerce.domain.model.Category
+import com.zibro.ecommerce.presentation.ui.category.CategoryInfoScreen
+import com.zibro.ecommerce.presentation.ui.home.MainCategoryScreen
+import com.zibro.ecommerce.presentation.ui.home.MainHomeScreen
 import com.zibro.ecommerce.presentation.ui.theme.EcommerceAppTheme
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
-
-sealed class MainNavigationItem(
-    val route : String,
-    val name : String,
-    val icon : ImageVector
-) {
-    data object Main : MainNavigationItem("Main", "메인", Icons.Filled.Home)
-    data object Category : MainNavigationItem("Category", "카테고리", Icons.Filled.Star)
-    data object MyPage : MainNavigationItem("MyPage", "마이페이지", Icons.Filled.Person)
-}
 
 @Preview(showBackground = true)
 @Composable
@@ -57,12 +48,16 @@ fun MainScreen() {
     val viewModel = hiltViewModel<MainViewModel>()
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
         topBar = { Header(viewModel) },
         snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
-            MainBottomNavigationBar(navController)
+            if(NavigationItem.MainNav.isMainRoute(currentRoute)) {
+                MainBottomNavigationBar(navController, currentRoute)
+            }
         }
     ) { innerPadding ->
         MainNavigationScreen(viewModel,navController, innerPadding)
@@ -88,16 +83,17 @@ fun Header(
 }
 
 @Composable
-fun MainBottomNavigationBar(navController : NavHostController) {
+fun MainBottomNavigationBar(
+    navController : NavHostController,
+    currentRoute : String?
+) {
     val bottomNavigationItems = listOf(
-        MainNavigationItem.Main,
-        MainNavigationItem.Category,
-        MainNavigationItem.MyPage
+        NavigationItem.MainNav.Home,
+        NavigationItem.MainNav.Category,
+        NavigationItem.MainNav.MyPage,
     )
 
     NavigationBar{
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
 
         bottomNavigationItems.forEach { item ->
             NavigationBarItem(
@@ -129,16 +125,27 @@ fun MainNavigationScreen(
     NavHost(
         modifier = Modifier.padding(innerPadding),
         navController = navController,
-        startDestination = MainNavigationItem.Main.route,
+        startDestination = NavigationRouteName.MAIN_HOME,
     ) {
-        composable(MainNavigationItem.Main.route) {
-            HomeScreen(viewModel = mainViewModel)
+        composable(NavigationRouteName.MAIN_HOME) {
+            MainHomeScreen(viewModel = mainViewModel)
         }
-        composable(MainNavigationItem.Category.route) {
-            CategoryScreen(viewModel = mainViewModel)
+        composable(NavigationRouteName.MAIN_CATEGORY) {
+            MainCategoryScreen(viewModel = mainViewModel, navController)
         }
-        composable(MainNavigationItem.MyPage.route) {
+        composable(NavigationRouteName.MAIN_MY_PAGE) {
             Text("마이페이지 화면")
+        }
+        composable(
+            NavigationRouteName.CATEGORY + "/{category}",
+            arguments = listOf(navArgument("category") { type = NavType.StringType })
+        ) {
+            val categoryString = it.arguments?.getString("category")
+            val category = Gson().fromJson(categoryString, Category::class.java)
+
+            if(category != null) {
+                CategoryInfoScreen(category)
+            }
         }
     }
 }

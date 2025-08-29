@@ -1,9 +1,8 @@
 package com.zibro.ecommerce.presentation.ui.home
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.content.MediaType.Companion.Text
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -17,12 +16,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
 
 @Composable
-fun CategoryScreen(viewModel : MainViewModel) {
+fun MainCategoryScreen(
+    viewModel : MainViewModel,
+    navController: NavHostController
+) {
     val categories by viewModel.categoryList.collectAsState(initial = listOf())
 
     LazyVerticalGrid(
@@ -37,8 +39,12 @@ fun CategoryScreen(viewModel : MainViewModel) {
             Card(
                 shape = RoundedCornerShape(4.dp),
                 modifier = Modifier.fillMaxWidth()
+                    .height(100.dp)
                     .padding(10.dp)
-                    .shadow(10.dp)
+                    .shadow(10.dp),
+                onClick = {
+                    viewModel.openCategory(navController, categories[it])
+                }
             ) {
                 Text(
                     text = categories[it].categoryName,
