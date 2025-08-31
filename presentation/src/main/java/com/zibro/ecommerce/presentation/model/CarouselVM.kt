@@ -7,7 +7,7 @@ import com.zibro.ecommerce.presentation.delegate.ProductDelegate
 class CarouselVM(
     model: Carousel,
     private val productDelegate : ProductDelegate
-) : PresentationVM(model){
+) : PresentationVM<Carousel>(model){
 
     fun openCarouselProduct(product : Product) {
         productDelegate.openProduct(product)

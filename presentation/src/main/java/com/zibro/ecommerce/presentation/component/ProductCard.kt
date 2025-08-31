@@ -30,10 +30,12 @@ import com.zibro.ecommerce.domain.model.Product
 import com.zibro.ecommerce.domain.model.SalesStatus
 import com.zibro.ecommerce.domain.model.Shop
 import com.zibro.ecommerce.presentation.R
+import com.zibro.ecommerce.presentation.delegate.ProductDelegate
+import com.zibro.ecommerce.presentation.model.ProductVM
 import com.zibro.ecommerce.presentation.ui.theme.Purple80
 
 @Composable
-fun ProductCard(product : Product, onClick : (Product) -> Unit?) {
+fun ProductCard(presentationVM : ProductVM) {
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
@@ -60,13 +62,13 @@ fun ProductCard(product : Product, onClick : (Product) -> Unit?) {
             Text(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
-                text = product.shop.shopName
+                text = presentationVM.model.shop.shopName
             )
             Text(
                 fontSize = 14.sp,
-                text = product.productName
+                text = presentationVM.model.productName
             )
-            Price(product)
+            Price(presentationVM.model)
         }
     }
 }
@@ -109,55 +111,73 @@ fun Price(product: Product) {
 @Composable
 private fun PreviewProductCard() {
     ProductCard(
-        product = Product(
-            "1",
-            "상품 이름",
-            "",
-            price = Price(30000, 30000, SalesStatus.ON_SALE),
-            category = Category.Top,
-            shop = Shop("1001", "패캠샵", ""),
-            isNew = true,
-            isFreeShipping = false,
-        ),
-        ) {
+        ProductVM(
+            model = Product(
+                "1",
+                "상품 이름",
+                "",
+                price = Price(30000, 30000, SalesStatus.ON_SALE),
+                category = Category.Top,
+                shop = Shop("1001", "패캠샵", ""),
+                isNew = true,
+                isFreeShipping = false,
+            ),
+            object : ProductDelegate {
+                override fun openProduct(product: Product) {
+                    TODO("Not yet implemented")
+                }
 
-    }
+            }
+        )
+    )
 }
 
 @Preview
 @Composable
 private fun PreviewProductCardDisCount() {
     ProductCard(
-        product = Product(
-            "1",
-            "상품 이름",
-            "",
-            price = Price(30000, 20000, SalesStatus.ON_DISCOUNT),
-            category = Category.Top,
-            shop = Shop("1001", "패하", ""),
-            isNew = true,
-            isFreeShipping = false,
-        ),
-    ) {
+        ProductVM(
+            model = Product(
+                "1",
+                "상품 이름",
+                "",
+                price = Price(30000, 30000, SalesStatus.ON_DISCOUNT),
+                category = Category.Top,
+                shop = Shop("1001", "패캠샵", ""),
+                isNew = true,
+                isFreeShipping = false,
+            ),
+            object : ProductDelegate {
+                override fun openProduct(product: Product) {
+                    TODO("Not yet implemented")
+                }
 
-    }
+            }
+        )
+    )
 }
 
 @Preview
 @Composable
 private fun PreviewProductCardSoldOut() {
     ProductCard(
-        product = Product(
-            "1",
-            "상품 이름",
-            "",
-            price = Price(30000, 30000, SalesStatus.SOLD_OUT),
-            category = Category.Top,
-            shop = Shop("1001", "패하", ""),
-            isNew = true,
-            isFreeShipping = false,
-        ),
-    ) {
+        ProductVM(
+            model = Product(
+                "1",
+                "상품 이름",
+                "",
+                price = Price(30000, 30000, SalesStatus.SOLD_OUT),
+                category = Category.Top,
+                shop = Shop("1001", "패캠샵", ""),
+                isNew = true,
+                isFreeShipping = false,
+            ),
+            object : ProductDelegate {
+                override fun openProduct(product: Product) {
+                    TODO("Not yet implemented")
+                }
 
-    }
+            }
+        )
+    )
 }

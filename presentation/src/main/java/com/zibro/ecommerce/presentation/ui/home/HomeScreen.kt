@@ -17,6 +17,11 @@ import com.zibro.ecommerce.presentation.component.BannerListCard
 import com.zibro.ecommerce.presentation.component.CarouselCard
 import com.zibro.ecommerce.presentation.component.ProductCard
 import com.zibro.ecommerce.presentation.component.RankingCard
+import com.zibro.ecommerce.presentation.model.BannerListVM
+import com.zibro.ecommerce.presentation.model.BannerVM
+import com.zibro.ecommerce.presentation.model.CarouselVM
+import com.zibro.ecommerce.presentation.model.ProductVM
+import com.zibro.ecommerce.presentation.model.RankingVM
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
 
 @Composable
@@ -31,26 +36,16 @@ fun MainHomeScreen(viewModel: MainViewModel) {
             modelList.size,
             span = { index ->
                 val item = modelList[index]
-                val spanCount = getSpanCountByType(item.type, columnCount)
+                val spanCount = getSpanCountByType(item.model.type, columnCount)
                 GridItemSpan(spanCount)
             }
         ) {
             when (val item = modelList[it]) {
-                is Banner -> BannerCard(model = item) { model ->
-                    viewModel.openBanner(model)
-                }
-                is Product -> ProductCard(product = item) { model ->
-                    viewModel.openProduct(model)
-                }
-                is BannerList -> BannerListCard(model = item) { model ->
-                    viewModel.openBannerList(model)
-                }
-                is Carousel -> CarouselCard(model = item) { model ->
-                    viewModel.openCarouselProduct(model)
-                }
-                is Ranking -> RankingCard(model = item) { model ->
-                    viewModel.openRanking(model)
-                }
+                is BannerVM -> BannerCard(presentationVM = item)
+                is ProductVM -> ProductCard(presentationVM = item)
+                is BannerListVM -> BannerListCard(presentationVM = item)
+                is CarouselVM -> CarouselCard(presentationVM = item)
+                is RankingVM -> RankingCard(presentationVM = item)
             }
         }
     }

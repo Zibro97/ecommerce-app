@@ -7,7 +7,7 @@ import com.zibro.ecommerce.presentation.delegate.ProductDelegate
 class RankingVM(
     model : Ranking,
     private val productDelegate: ProductDelegate
-) : PresentationVM(model){
+) : PresentationVM<Ranking>(model){
 
     fun openRankingProduct(product : Product) {
         productDelegate.openProduct(product)

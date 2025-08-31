@@ -23,16 +23,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.zibro.ecommerce.domain.model.Carousel
 import com.zibro.ecommerce.domain.model.Product
 import com.zibro.ecommerce.presentation.R
+import com.zibro.ecommerce.presentation.model.CarouselVM
 
 @Composable
-fun CarouselCard(model : Carousel, onClick : (Product) -> Unit) {
+fun CarouselCard(presentationVM : CarouselVM) {
     val scrollState = rememberLazyListState()
     Column {
         Text(
-            text = model.title,
+            text = presentationVM.model.title,
             fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(10.dp)
@@ -43,11 +43,12 @@ fun CarouselCard(model : Carousel, onClick : (Product) -> Unit) {
             modifier = Modifier.fillMaxWidth()
                 .wrapContentHeight()
         ) {
-            items(model.productList.size) {
+            items(presentationVM.model.productList.size) { productIndex ->
                 CarouselProductCard(
-                    product = model.productList[it],
-                    onClick = onClick
-                )
+                    product = presentationVM.model.productList[productIndex],
+                ) {
+                    presentationVM.openCarouselProduct(it)
+                }
             }
         }
     }

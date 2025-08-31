@@ -6,7 +6,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.zibro.ecommerce.domain.model.Banner
 import com.zibro.ecommerce.domain.model.BannerList
+import com.zibro.ecommerce.domain.model.BaseModel
+import com.zibro.ecommerce.domain.model.Carousel
 import com.zibro.ecommerce.domain.model.Category
+import com.zibro.ecommerce.domain.model.ModelType
 import com.zibro.ecommerce.domain.model.Product
 import com.zibro.ecommerce.domain.model.Ranking
 import com.zibro.ecommerce.domain.usecase.CategoryUseCase
@@ -14,11 +17,18 @@ import com.zibro.ecommerce.domain.usecase.MainUseCase
 import com.zibro.ecommerce.presentation.delegate.BannerDelegate
 import com.zibro.ecommerce.presentation.delegate.CategoryDelegate
 import com.zibro.ecommerce.presentation.delegate.ProductDelegate
+import com.zibro.ecommerce.presentation.model.BannerListVM
+import com.zibro.ecommerce.presentation.model.BannerVM
+import com.zibro.ecommerce.presentation.model.CarouselVM
+import com.zibro.ecommerce.presentation.model.PresentationVM
+import com.zibro.ecommerce.presentation.model.ProductVM
+import com.zibro.ecommerce.presentation.model.RankingVM
 import com.zibro.ecommerce.presentation.ui.NavigationRouteName
 import com.zibro.ecommerce.presentation.util.NavigationUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,7 +40,7 @@ class MainViewModel @Inject constructor(
     private val _columnCount = MutableStateFlow(DEFAULT_COLUMN_COUNT)
     val columnCount : StateFlow<Int> = _columnCount
 
-    val modelList = mainUseCase()
+    val modelList = mainUseCase().map(::convertToPresentationVM)
     val categoryList = categoryUseCase.getCategory()
 
     fun openSearchForm() {
@@ -70,6 +80,18 @@ class MainViewModel @Inject constructor(
 
     override fun openBanner(bannerId: String) {
         TODO("Not yet implemented")
+    }
+
+    private fun convertToPresentationVM(list : List<BaseModel>) : List<PresentationVM<out BaseModel>> {
+        return list.map { model ->
+            when(model) {
+                is Product -> ProductVM(model, this)
+                is Banner -> BannerVM(model, this)
+                is BannerList -> BannerListVM(model, this)
+                is Ranking -> RankingVM(model, this)
+                is Carousel -> CarouselVM(model,this)
+            }
+        }
     }
 
     companion object {

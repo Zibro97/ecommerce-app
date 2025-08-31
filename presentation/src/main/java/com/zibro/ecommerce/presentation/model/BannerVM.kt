@@ -6,6 +6,6 @@ import com.zibro.ecommerce.presentation.delegate.BannerDelegate
 class BannerVM(
     model : Banner,
     bannerDelegate: BannerDelegate
-) : PresentationVM(model), BannerDelegate by bannerDelegate {
+) : PresentationVM<Banner>(model), BannerDelegate by bannerDelegate {
 
 }

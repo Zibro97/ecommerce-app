@@ -21,22 +21,24 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.zibro.ecommerce.domain.model.BannerList
 import com.zibro.ecommerce.presentation.R
+import com.zibro.ecommerce.presentation.model.BannerListVM
+import com.zibro.ecommerce.presentation.model.PresentationVM
 import kotlinx.coroutines.delay
 
 @Composable
-fun BannerListCard(model : BannerList, onClick: (BannerList) -> Unit) {
+fun BannerListCard(presentationVM : BannerListVM) {
     val pagerState = rememberPagerState()
     LaunchedEffect(key1 = pagerState) {
         autoScrollInfinity(pagerState)
     }
-    HorizontalPager(count = model.imageList.size, state = pagerState) {
+    HorizontalPager(count = presentationVM.model.imageList.size, state = pagerState) {
         Card(
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
                 .shadow(20.dp),
-            onClick = { onClick(model) }
+            onClick = { presentationVM.openBannerList(presentationVM.model.bannerId) }
         ) {
             Image(
                 painter = painterResource(id = R.drawable.product_image),

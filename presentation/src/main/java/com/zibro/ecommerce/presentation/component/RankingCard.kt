@@ -21,17 +21,18 @@ import com.google.accompanist.pager.rememberPagerState
 import com.zibro.ecommerce.domain.model.Product
 import com.zibro.ecommerce.domain.model.Ranking
 import com.zibro.ecommerce.presentation.R
+import com.zibro.ecommerce.presentation.model.RankingVM
 
 private const val DEFAULT_RANKING_ITEM_COUNT = 3
 
 @Composable
-fun RankingCard(model: Ranking, onClick: (Ranking) -> Unit) {
+fun RankingCard(presentationVM : RankingVM) {
     val pagerState = rememberPagerState()
-    val pageCount = model.productList.size / DEFAULT_RANKING_ITEM_COUNT
+    val pageCount = presentationVM.model.productList.size / DEFAULT_RANKING_ITEM_COUNT
 
     Column {
         Text(
-            text = model.title,
+            text = presentationVM.model.title,
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
@@ -42,9 +43,16 @@ fun RankingCard(model: Ranking, onClick: (Ranking) -> Unit) {
             contentPadding = PaddingValues(end = 50.dp)
         ) { idx ->
             Column {
-                RankingProductCard(index = idx * 3, product = model.productList[idx * 3], onClick)
-                RankingProductCard(index = idx * 3 + 1, product = model.productList[idx * 3 + 1], onClick)
-                RankingProductCard(index = idx * 3 + 2, product = model.productList[idx * 3 + 2], onClick)
+                val product = presentationVM.model.productList[idx * 3]
+                RankingProductCard(index = idx * 3, product = product) {
+                    presentationVM.openRankingProduct(product = product)
+                }
+                RankingProductCard(index = idx * 3 + 1, product = product) {
+                    presentationVM.openRankingProduct(product = product)
+                }
+                RankingProductCard(index = idx * 3 + 2, product = product) {
+                    presentationVM.openRankingProduct(product = product)
+                }
             }
         }
     }
