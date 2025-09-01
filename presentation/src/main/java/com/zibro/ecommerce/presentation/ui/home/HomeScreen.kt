@@ -6,12 +6,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.zibro.ecommerce.domain.model.Banner
-import com.zibro.ecommerce.domain.model.BannerList
-import com.zibro.ecommerce.domain.model.Carousel
+import androidx.navigation.NavHostController
 import com.zibro.ecommerce.domain.model.ModelType
-import com.zibro.ecommerce.domain.model.Product
-import com.zibro.ecommerce.domain.model.Ranking
 import com.zibro.ecommerce.presentation.component.BannerCard
 import com.zibro.ecommerce.presentation.component.BannerListCard
 import com.zibro.ecommerce.presentation.component.CarouselCard
@@ -25,7 +21,10 @@ import com.zibro.ecommerce.presentation.model.RankingVM
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
 
 @Composable
-fun MainHomeScreen(viewModel: MainViewModel) {
+fun MainHomeScreen(
+    navController: NavHostController,
+    viewModel: MainViewModel
+) {
     val modelList by viewModel.modelList.collectAsState(initial = listOf())
     val columnCount by viewModel.columnCount.collectAsState()
 
@@ -42,17 +41,28 @@ fun MainHomeScreen(viewModel: MainViewModel) {
         ) {
             when (val item = modelList[it]) {
                 is BannerVM -> BannerCard(presentationVM = item)
-                is ProductVM -> ProductCard(presentationVM = item)
+                is ProductVM -> ProductCard(
+                    navHostController = navController,
+                    presentationVM = item
+                )
+
                 is BannerListVM -> BannerListCard(presentationVM = item)
-                is CarouselVM -> CarouselCard(presentationVM = item)
-                is RankingVM -> RankingCard(presentationVM = item)
+                is CarouselVM -> CarouselCard(
+                    navHostController = navController,
+                    presentationVM = item
+                )
+
+                is RankingVM -> RankingCard(
+                    navHostController = navController,
+                    presentationVM = item
+                )
             }
         }
     }
 }
 
 private fun getSpanCountByType(type: ModelType, defaultColumnCount: Int): Int {
-    return when(type) {
+    return when (type) {
         ModelType.PRODUCT -> 1
         ModelType.BANNER, ModelType.BANNER_LIST, ModelType.CAROUSEL -> defaultColumnCount
         ModelType.RANKING -> defaultColumnCount

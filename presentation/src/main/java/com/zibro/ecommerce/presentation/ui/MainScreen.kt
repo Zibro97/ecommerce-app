@@ -29,9 +29,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.gson.Gson
 import com.zibro.ecommerce.domain.model.Category
+import com.zibro.ecommerce.domain.model.Product
 import com.zibro.ecommerce.presentation.ui.category.CategoryInfoScreen
 import com.zibro.ecommerce.presentation.ui.home.MainCategoryScreen
 import com.zibro.ecommerce.presentation.ui.home.MainHomeScreen
+import com.zibro.ecommerce.presentation.ui.product_detail.ProductDetailScreen
 import com.zibro.ecommerce.presentation.ui.theme.EcommerceAppTheme
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
 
@@ -128,7 +130,7 @@ fun MainNavigationScreen(
         startDestination = NavigationRouteName.MAIN_HOME,
     ) {
         composable(NavigationRouteName.MAIN_HOME) {
-            MainHomeScreen(viewModel = mainViewModel)
+            MainHomeScreen(navController = navController,viewModel = mainViewModel)
         }
         composable(NavigationRouteName.MAIN_CATEGORY) {
             MainCategoryScreen(viewModel = mainViewModel, navController)
@@ -144,7 +146,20 @@ fun MainNavigationScreen(
             val category = Gson().fromJson(categoryString, Category::class.java)
 
             if(category != null) {
-                CategoryInfoScreen(category)
+                CategoryInfoScreen(
+                    navHostController = navController,
+                    category = category
+                )
+            }
+        }
+        composable(
+            route = NavigationRouteName.PRODUCT_DETAIL + "/{product}",
+            arguments = listOf(navArgument("product") { type = NavType.StringType })
+        ) {
+            val productString = it.arguments?.getString("product")
+
+            if(productString != null) {
+                ProductDetailScreen(productString)
             }
         }
     }

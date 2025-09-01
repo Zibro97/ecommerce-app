@@ -24,6 +24,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.zibro.ecommerce.domain.model.Category
 import com.zibro.ecommerce.domain.model.Price
 import com.zibro.ecommerce.domain.model.Product
@@ -35,14 +37,17 @@ import com.zibro.ecommerce.presentation.model.ProductVM
 import com.zibro.ecommerce.presentation.ui.theme.Purple80
 
 @Composable
-fun ProductCard(presentationVM : ProductVM) {
+fun ProductCard(navHostController: NavHostController, presentationVM: ProductVM) {
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .fillMaxWidth()
             .height(intrinsicSize = IntrinsicSize.Max)
             .padding(10.dp)
-            .shadow(elevation = 10.dp)
+            .shadow(elevation = 10.dp),
+        onClick = {
+            presentationVM.openProduct(navHostController, presentationVM.model)
+        }
     ) {
         Column(
             modifier = Modifier
@@ -75,7 +80,7 @@ fun ProductCard(presentationVM : ProductVM) {
 
 @Composable
 fun Price(product: Product) {
-    when(product.price.salesStatus) {
+    when (product.price.salesStatus) {
         SalesStatus.ON_SALE -> {
             Text(
                 fontSize = 18.sp,
@@ -83,6 +88,7 @@ fun Price(product: Product) {
                 text = "${product.price.originPrice}원"
             )
         }
+
         SalesStatus.ON_DISCOUNT -> {
             Text(
                 fontSize = 14.sp,
@@ -97,6 +103,7 @@ fun Price(product: Product) {
                 text = "${product.price.finalPrice}원"
             )
         }
+
         SalesStatus.SOLD_OUT -> {
             Text(
                 fontSize = 18.sp,
@@ -111,6 +118,7 @@ fun Price(product: Product) {
 @Composable
 private fun PreviewProductCard() {
     ProductCard(
+        rememberNavController(),
         ProductVM(
             model = Product(
                 "1",
@@ -123,10 +131,9 @@ private fun PreviewProductCard() {
                 isFreeShipping = false,
             ),
             object : ProductDelegate {
-                override fun openProduct(product: Product) {
+                override fun openProduct(navController: NavHostController, product: Product) {
                     TODO("Not yet implemented")
                 }
-
             }
         )
     )
@@ -136,6 +143,7 @@ private fun PreviewProductCard() {
 @Composable
 private fun PreviewProductCardDisCount() {
     ProductCard(
+        rememberNavController(),
         ProductVM(
             model = Product(
                 "1",
@@ -148,7 +156,7 @@ private fun PreviewProductCardDisCount() {
                 isFreeShipping = false,
             ),
             object : ProductDelegate {
-                override fun openProduct(product: Product) {
+                override fun openProduct(navController: NavHostController, product: Product) {
                     TODO("Not yet implemented")
                 }
 
@@ -161,6 +169,7 @@ private fun PreviewProductCardDisCount() {
 @Composable
 private fun PreviewProductCardSoldOut() {
     ProductCard(
+        rememberNavController(),
         ProductVM(
             model = Product(
                 "1",
@@ -173,7 +182,7 @@ private fun PreviewProductCardSoldOut() {
                 isFreeShipping = false,
             ),
             object : ProductDelegate {
-                override fun openProduct(product: Product) {
+                override fun openProduct(navController: NavHostController, product: Product) {
                     TODO("Not yet implemented")
                 }
 

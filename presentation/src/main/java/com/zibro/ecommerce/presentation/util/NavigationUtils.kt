@@ -1,11 +1,11 @@
 package com.zibro.ecommerce.presentation.util
 
-import android.net.Uri
 import android.os.Parcelable
 import androidx.navigation.NavHostController
 import com.google.gson.Gson
 import androidx.core.net.toUri
 import com.zibro.ecommerce.domain.model.Category
+import com.zibro.ecommerce.domain.model.Product
 
 object NavigationUtils {
     fun navigate(
@@ -24,6 +24,9 @@ object NavigationUtils {
                 }
                 is Category -> {
                     argument = String.format("/%s", Gson().toJson(args).toUri())
+                }
+                is Product -> {
+                    argument = String.format("/%s", args.productId)
                 }
             }
         }

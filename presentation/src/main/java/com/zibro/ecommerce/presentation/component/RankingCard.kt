@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.zibro.ecommerce.domain.model.Product
@@ -26,7 +27,7 @@ import com.zibro.ecommerce.presentation.model.RankingVM
 private const val DEFAULT_RANKING_ITEM_COUNT = 3
 
 @Composable
-fun RankingCard(presentationVM : RankingVM) {
+fun RankingCard(navHostController: NavHostController, presentationVM : RankingVM) {
     val pagerState = rememberPagerState()
     val pageCount = presentationVM.model.productList.size / DEFAULT_RANKING_ITEM_COUNT
 
@@ -45,13 +46,13 @@ fun RankingCard(presentationVM : RankingVM) {
             Column {
                 val product = presentationVM.model.productList[idx * 3]
                 RankingProductCard(index = idx * 3, product = product) {
-                    presentationVM.openRankingProduct(product = product)
+                    presentationVM.openRankingProduct(navController = navHostController,product = product)
                 }
                 RankingProductCard(index = idx * 3 + 1, product = product) {
-                    presentationVM.openRankingProduct(product = product)
+                    presentationVM.openRankingProduct(navController = navHostController,product = product)
                 }
                 RankingProductCard(index = idx * 3 + 2, product = product) {
-                    presentationVM.openRankingProduct(product = product)
+                    presentationVM.openRankingProduct(navController = navHostController,product = product)
                 }
             }
         }
