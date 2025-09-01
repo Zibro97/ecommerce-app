@@ -31,11 +31,7 @@ fun CategoryInfoScreen(
         contentPadding = PaddingValues(10.dp)
     ) {
         items(products.size) { idx ->
-            ProductCard(
-                product = products[idx],
-            ) { product ->
-                viewModel.openProduct(product)
-            }
+            ProductCard(presentationVM = products[idx])
         }
     }
 }
