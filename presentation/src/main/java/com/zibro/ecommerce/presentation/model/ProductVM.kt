@@ -1,7 +1,7 @@
 package com.zibro.ecommerce.presentation.model
 
+import androidx.navigation.NavHostController
 import com.zibro.ecommerce.domain.model.Product
-import com.zibro.ecommerce.domain.model.Ranking
 import com.zibro.ecommerce.presentation.delegate.ProductDelegate
 
 class ProductVM(
@@ -9,8 +9,8 @@ class ProductVM(
     private val productDelegate: ProductDelegate
 ) : PresentationVM<Product>(model), ProductDelegate by productDelegate {
 
-    fun openRankingProduct(product : Product) {
-        productDelegate.openProduct(product)
+    fun openRankingProduct(navHostController: NavHostController,product : Product) {
+        productDelegate.openProduct(navHostController,product)
         sendRankingLog()
     }
 

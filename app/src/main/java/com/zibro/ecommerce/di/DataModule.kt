@@ -2,8 +2,10 @@ package com.zibro.ecommerce.di
 
 import com.zibro.ecommerce.data.repository.CategoryRepositoryImpl
 import com.zibro.ecommerce.data.repository.MainRepositoryImpl
+import com.zibro.ecommerce.data.repository.ProductDetailRepositoryImpl
 import com.zibro.ecommerce.domain.repository.CategoryRepository
 import com.zibro.ecommerce.domain.repository.MainRepository
+import com.zibro.ecommerce.domain.repository.ProductDetailRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -24,4 +26,10 @@ interface DataModule {
     fun bindCategoryRepository(
         categoryRepositoryImpl: CategoryRepositoryImpl
     ) : CategoryRepository
+
+    @Binds
+    @Singleton
+    fun bindProductDetailRepository(
+        productDetailRepositoryImpl: ProductDetailRepositoryImpl
+    ) : ProductDetailRepository
 }
