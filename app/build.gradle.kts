@@ -47,6 +47,7 @@ dependencies {
     implementation(project(":presentation"))
 
     implementation(libs.hilt.android)
+    implementation(libs.androidx.room.runtime.android)
     kapt(libs.hilt.android.compiler)
 
     implementation(libs.androidx.core.ktx)

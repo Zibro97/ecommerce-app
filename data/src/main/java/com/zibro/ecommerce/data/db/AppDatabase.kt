@@ -5,15 +5,18 @@ import androidx.room.RoomDatabase
 import com.zibro.ecommerce.data.db.dao.BasketDao
 import com.zibro.ecommerce.data.db.dao.LikeDao
 import com.zibro.ecommerce.data.db.dao.PurchaseDao
+import com.zibro.ecommerce.data.db.dao.SearchDao
 import com.zibro.ecommerce.data.db.entity.BasketProductEntity
 import com.zibro.ecommerce.data.db.entity.LikeProductEntity
 import com.zibro.ecommerce.data.db.entity.PurchaseProductEntity
+import com.zibro.ecommerce.data.db.entity.SearchKeywordEntity
 
 @Database(
     entities = [
         LikeProductEntity::class,
         BasketProductEntity::class,
-        PurchaseProductEntity::class
+        PurchaseProductEntity::class,
+        SearchKeywordEntity::class
     ],
     version = 1,
 )
@@ -26,4 +29,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun likeDao() : LikeDao
     abstract fun basketDao() : BasketDao
     abstract fun purchaseDao() : PurchaseDao
+    abstract fun searchDao() : SearchDao
 }
