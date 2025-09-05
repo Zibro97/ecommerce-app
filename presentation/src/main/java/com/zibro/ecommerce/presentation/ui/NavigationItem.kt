@@ -12,6 +12,7 @@ import com.zibro.ecommerce.presentation.ui.NavigationRouteName.MAIN_CATEGORY
 import com.zibro.ecommerce.presentation.ui.NavigationRouteName.MAIN_HOME
 import com.zibro.ecommerce.presentation.ui.NavigationRouteName.MAIN_MY_PAGE
 import com.zibro.ecommerce.presentation.ui.NavigationRouteName.PRODUCT_DETAIL
+import com.zibro.ecommerce.presentation.ui.NavigationRouteName.SEARCH
 
 sealed class NavigationItem(open val route: String) {
     sealed class MainNav(
@@ -42,6 +43,8 @@ sealed class NavigationItem(open val route: String) {
     sealed class ProductDetailNav(
         val product : Product
     ) : NavigationItem(PRODUCT_DETAIL)
+
+    object SearchNav : NavigationItem(SEARCH)
 }
 
 object NavigationRouteName {
@@ -50,4 +53,5 @@ object NavigationRouteName {
     const val MAIN_MY_PAGE = "main_my_page"
     const val CATEGORY = "category"
     const val PRODUCT_DETAIL = "product_detail"
+    const val SEARCH = "search"
 }

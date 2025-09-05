@@ -1,6 +1,7 @@
 package com.zibro.ecommerce.presentation.viewmodel.search
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.zibro.ecommerce.domain.model.Product
 import com.zibro.ecommerce.domain.model.SearchKeyword
@@ -13,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,9 +25,11 @@ class SearchViewModel @Inject constructor(
     val searchResult : StateFlow<List<ProductVM>> = _searchResult
     val searchKeywords = searchUseCase.getSearchKeywords()
 
-    suspend fun search(keyword : String) {
-        searchUseCase.search(SearchKeyword(keyword = keyword)).collectLatest {
-            _searchResult.emit(it.map(::convertToProductVM))
+    fun search(keyword : String) {
+        viewModelScope.launch {
+            searchUseCase.search(SearchKeyword(keyword = keyword)).collectLatest {
+                _searchResult.emit(it.map(::convertToProductVM))
+            }
         }
     }
 

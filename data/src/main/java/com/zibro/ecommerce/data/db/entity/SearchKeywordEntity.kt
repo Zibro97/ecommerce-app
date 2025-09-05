@@ -6,11 +6,9 @@ import com.zibro.ecommerce.domain.model.SearchKeyword
 
 @Entity(tableName = "search")
 data class SearchKeywordEntity(
+    @PrimaryKey
     val keyword : String
-) {
-    @PrimaryKey(autoGenerate = true)
-    val id:Int = 0
-}
+)
 
 fun SearchKeywordEntity.toDomain() : SearchKeyword {
     return SearchKeyword(keyword = keyword)

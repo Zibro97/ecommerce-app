@@ -29,11 +29,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.gson.Gson
 import com.zibro.ecommerce.domain.model.Category
-import com.zibro.ecommerce.domain.model.Product
 import com.zibro.ecommerce.presentation.ui.category.CategoryInfoScreen
 import com.zibro.ecommerce.presentation.ui.home.MainCategoryScreen
 import com.zibro.ecommerce.presentation.ui.home.MainHomeScreen
 import com.zibro.ecommerce.presentation.ui.product_detail.ProductDetailScreen
+import com.zibro.ecommerce.presentation.ui.search.SearchScreen
 import com.zibro.ecommerce.presentation.ui.theme.EcommerceAppTheme
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
 
@@ -54,7 +54,14 @@ fun MainScreen() {
     val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
-        topBar = { Header(viewModel) },
+        topBar = {
+            if(NavigationItem.MainNav.isMainRoute(currentRoute)){
+                MainHeader(
+                    viewModel,
+                    navController
+                )
+            }
+        },
         snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
             if(NavigationItem.MainNav.isMainRoute(currentRoute)) {
@@ -68,14 +75,15 @@ fun MainScreen() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Header(
-    viewModel: MainViewModel
+fun MainHeader(
+    viewModel: MainViewModel,
+    navController: NavHostController
 ) {
     TopAppBar(
         title = { Text("Ecommerce App") },
         actions = {
             IconButton(
-                onClick = { viewModel.openSearchForm() }
+                onClick = { viewModel.openSearchForm(navController) }
             ) {
                 Icon(Icons.Filled.Search, "SearchIcon")
 
@@ -161,6 +169,11 @@ fun MainNavigationScreen(
             if(productString != null) {
                 ProductDetailScreen(productString)
             }
+        }
+        composable(
+            route = NavigationRouteName.SEARCH,
+        ) {
+            SearchScreen(navController)
         }
     }
 }
