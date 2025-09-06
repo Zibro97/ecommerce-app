@@ -10,7 +10,6 @@ import com.zibro.ecommerce.domain.usecase.SearchUseCase
 import com.zibro.ecommerce.presentation.delegate.ProductDelegate
 import com.zibro.ecommerce.presentation.model.ProductVM
 import com.zibro.ecommerce.presentation.ui.NavigationRouteName
-import com.zibro.ecommerce.presentation.ui.search.SearchManager
 import com.zibro.ecommerce.presentation.util.NavigationUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +30,7 @@ class SearchViewModel @Inject constructor(
 
     fun search(keyword : String) {
         viewModelScope.launch {
-            searchInternal(keyword)
+            searchInternalNewSearchKeyword(keyword)
         }
     }
 
@@ -43,10 +42,17 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private suspend fun searchInternal(newSearchKeyword : String = "") {
+    private suspend fun searchInternal() {
         searchUseCase.search(searchManager.searchKeyword, searchManager.currentFilters()).collectLatest {
-            if(newSearchKeyword.isNotEmpty()) searchManager.initSearchManager(newSearchKeyword, it)
+            _searchResult.emit(it.map(::convertToProductVM))
+        }
+    }
 
+    private suspend fun searchInternalNewSearchKeyword(newSearchKeyword : String = "") {
+        searchManager.clearFilter()
+
+        searchUseCase.search(SearchKeyword(newSearchKeyword), searchManager.currentFilters()).collectLatest {
+            searchManager.initSearchManager(newSearchKeyword, it)
             _searchResult.emit(it.map(::convertToProductVM))
         }
     }

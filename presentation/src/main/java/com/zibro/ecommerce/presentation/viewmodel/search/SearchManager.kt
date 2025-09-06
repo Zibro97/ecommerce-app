@@ -1,4 +1,4 @@
-package com.zibro.ecommerce.presentation.ui.search
+package com.zibro.ecommerce.presentation.viewmodel.search
 
 import com.zibro.ecommerce.domain.model.Category
 import com.zibro.ecommerce.domain.model.Product
@@ -21,17 +21,17 @@ class SearchManager {
         var minPrice = Int.MAX_VALUE
         var maxPrice = Int.MIN_VALUE
 
-        searchResult.forEach {
-            if (!categories.contains(it.category)) {
-                categories.add(it.category)
+        searchResult.forEach { product ->
+            if (categories.find { it.categoryId == product.category.categoryId } == null) {
+                categories.add(product.category)
             }
 
-            minPrice = min(minPrice, it.price.finalPrice)
-            maxPrice = max(maxPrice, it.price.finalPrice)
+            minPrice = min(minPrice, product.price.finalPrice)
+            maxPrice = max(maxPrice, product.price.finalPrice)
         }
         _filters.emit(
             listOf(
-                SearchFilter.PriceFilter(minPrice to maxPrice),
+                SearchFilter.PriceFilter(minPrice.toFloat() to maxPrice.toFloat()),
                 SearchFilter.CategoryFilter(categories)
             )
         )
@@ -51,6 +51,12 @@ class SearchManager {
             }
             it
         })
+    }
+
+    fun clearFilter() {
+        filters.value.forEach {
+            it.clear()
+        }
     }
 
     fun currentFilters() : List<SearchFilter> = filters.value
