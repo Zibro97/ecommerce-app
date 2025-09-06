@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.zibro.ecommerce.domain.model.Product
+import com.zibro.ecommerce.domain.model.SearchFilter
 import com.zibro.ecommerce.domain.model.SearchKeyword
 import com.zibro.ecommerce.domain.usecase.SearchUseCase
 import com.zibro.ecommerce.presentation.delegate.ProductDelegate
 import com.zibro.ecommerce.presentation.model.ProductVM
 import com.zibro.ecommerce.presentation.ui.NavigationRouteName
+import com.zibro.ecommerce.presentation.ui.search.SearchManager
 import com.zibro.ecommerce.presentation.util.NavigationUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,15 +23,31 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val searchUseCase: SearchUseCase
 ): ViewModel(), ProductDelegate {
+    private val searchManager = SearchManager()
     private val _searchResult = MutableStateFlow<List<ProductVM>>(listOf())
     val searchResult : StateFlow<List<ProductVM>> = _searchResult
     val searchKeywords = searchUseCase.getSearchKeywords()
+    val searchFilters = searchManager.filters
 
     fun search(keyword : String) {
         viewModelScope.launch {
-            searchUseCase.search(SearchKeyword(keyword = keyword)).collectLatest {
-                _searchResult.emit(it.map(::convertToProductVM))
-            }
+            searchInternal(keyword)
+        }
+    }
+
+    fun updateFilter(filter : SearchFilter) {
+        viewModelScope.launch {
+            searchManager.updateFilter(filter)
+
+            searchInternal()
+        }
+    }
+
+    private suspend fun searchInternal(newSearchKeyword : String = "") {
+        searchUseCase.search(searchManager.searchKeyword, searchManager.currentFilters()).collectLatest {
+            if(newSearchKeyword.isNotEmpty()) searchManager.initSearchManager(newSearchKeyword, it)
+
+            _searchResult.emit(it.map(::convertToProductVM))
         }
     }
 
