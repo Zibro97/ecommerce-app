@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.zibro.ecommerce.domain.model.AccountInfo
 import com.zibro.ecommerce.domain.model.Banner
 import com.zibro.ecommerce.domain.model.BannerList
 import com.zibro.ecommerce.domain.model.BaseModel
@@ -12,6 +13,7 @@ import com.zibro.ecommerce.domain.model.Category
 import com.zibro.ecommerce.domain.model.ModelType
 import com.zibro.ecommerce.domain.model.Product
 import com.zibro.ecommerce.domain.model.Ranking
+import com.zibro.ecommerce.domain.usecase.AccountUseCase
 import com.zibro.ecommerce.domain.usecase.CategoryUseCase
 import com.zibro.ecommerce.domain.usecase.MainUseCase
 import com.zibro.ecommerce.presentation.delegate.BannerDelegate
@@ -36,17 +38,31 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     mainUseCase: MainUseCase,
     categoryUseCase: CategoryUseCase,
+    private val accountUseCase: AccountUseCase
 ) : ViewModel(), ProductDelegate, BannerDelegate, CategoryDelegate {
     private val _columnCount = MutableStateFlow(DEFAULT_COLUMN_COUNT)
     val columnCount : StateFlow<Int> = _columnCount
 
     val modelList = mainUseCase().map(::convertToPresentationVM)
     val categoryList = categoryUseCase.getCategory()
+    val accountInfo = accountUseCase.getAccountInfo()
 
     fun openSearchForm(
         navController: NavHostController
     ) {
         NavigationUtils.navigate(navController, NavigationRouteName.SEARCH)
+    }
+
+    fun signInGoogle(accountInfo : AccountInfo) {
+        viewModelScope.launch {
+            accountUseCase.signInGoogle(accountInfo)
+        }
+    }
+
+    fun signOutGoogle() {
+        viewModelScope.launch {
+            accountUseCase.signOutGoogle()
+        }
     }
 
     fun updateColumnCount(count : Int) {

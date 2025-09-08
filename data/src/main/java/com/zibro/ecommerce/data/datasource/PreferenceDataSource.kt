@@ -3,6 +3,7 @@ package com.zibro.ecommerce.data.datasource
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.zibro.ecommerce.domain.model.AccountInfo
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -22,7 +23,7 @@ class PreferenceDataSource @Inject constructor(
     private val editor by lazy { prefs.edit() }
     private val gson = Gson()
 
-    private fun putString(key: String, value: String) {
+    private fun putString(key: String, value: String?) {
         editor.putString(key, value)
         editor.apply()
     }
@@ -47,5 +48,17 @@ class PreferenceDataSource @Inject constructor(
 
     private fun getInt(key: String, defValue : Int = 0): Int {
         return prefs.getInt(key, defValue)
+    }
+
+    fun putAccountInfo(accountInfo : AccountInfo) {
+        putString(ACCOUNT_INFO, gson.toJson(accountInfo))
+    }
+
+    fun getAccountInfo() : AccountInfo? {
+        return gson.fromJson(getString(ACCOUNT_INFO), AccountInfo::class.java)
+    }
+
+    fun removeAccountInfo() {
+        putString(ACCOUNT_INFO, null)
     }
 }

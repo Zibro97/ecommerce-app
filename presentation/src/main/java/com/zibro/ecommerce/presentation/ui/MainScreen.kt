@@ -27,26 +27,20 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.gson.Gson
 import com.zibro.ecommerce.domain.model.Category
 import com.zibro.ecommerce.presentation.ui.category.CategoryInfoScreen
 import com.zibro.ecommerce.presentation.ui.home.MainCategoryScreen
 import com.zibro.ecommerce.presentation.ui.home.MainHomeScreen
+import com.zibro.ecommerce.presentation.ui.home.MyPageScreen
 import com.zibro.ecommerce.presentation.ui.product_detail.ProductDetailScreen
 import com.zibro.ecommerce.presentation.ui.search.SearchScreen
 import com.zibro.ecommerce.presentation.ui.theme.EcommerceAppTheme
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
 
-@Preview(showBackground = true)
 @Composable
-fun DefaultScreenPreview() {
-    EcommerceAppTheme {
-        MainScreen()
-    }
-}
-
-@Composable
-fun MainScreen() {
+fun MainScreen(googleSignInClient : GoogleSignInClient) {
     val viewModel = hiltViewModel<MainViewModel>()
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -69,7 +63,7 @@ fun MainScreen() {
             }
         }
     ) { innerPadding ->
-        MainNavigationScreen(viewModel,navController, innerPadding)
+        MainNavigationScreen(viewModel,navController, innerPadding, googleSignInClient)
     }
 }
 
@@ -130,7 +124,8 @@ fun MainBottomNavigationBar(
 fun MainNavigationScreen(
     mainViewModel: MainViewModel,
     navController : NavHostController,
-    innerPadding : PaddingValues
+    innerPadding : PaddingValues,
+    googleSignInClient : GoogleSignInClient
 ) {
     NavHost(
         modifier = Modifier.padding(innerPadding),
@@ -144,7 +139,7 @@ fun MainNavigationScreen(
             MainCategoryScreen(viewModel = mainViewModel, navController)
         }
         composable(NavigationRouteName.MAIN_MY_PAGE) {
-            Text("마이페이지 화면")
+            MyPageScreen(viewModel = mainViewModel, googleSignInClient = googleSignInClient)
         }
         composable(
             NavigationRouteName.CATEGORY + "/{category}",
