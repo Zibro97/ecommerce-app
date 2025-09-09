@@ -6,6 +6,7 @@ data class AccountInfo(
     val type : Type
 ) {
     enum class Type {
-        GOOGLE
+        GOOGLE,
+        KAKAO
     }
 }

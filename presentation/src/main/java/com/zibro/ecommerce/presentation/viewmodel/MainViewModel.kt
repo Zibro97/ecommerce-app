@@ -2,7 +2,6 @@ package com.zibro.ecommerce.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.zibro.ecommerce.domain.model.AccountInfo
 import com.zibro.ecommerce.domain.model.Banner
@@ -10,7 +9,6 @@ import com.zibro.ecommerce.domain.model.BannerList
 import com.zibro.ecommerce.domain.model.BaseModel
 import com.zibro.ecommerce.domain.model.Carousel
 import com.zibro.ecommerce.domain.model.Category
-import com.zibro.ecommerce.domain.model.ModelType
 import com.zibro.ecommerce.domain.model.Product
 import com.zibro.ecommerce.domain.model.Ranking
 import com.zibro.ecommerce.domain.usecase.AccountUseCase
@@ -53,15 +51,15 @@ class MainViewModel @Inject constructor(
         NavigationUtils.navigate(navController, NavigationRouteName.SEARCH)
     }
 
-    fun signInGoogle(accountInfo : AccountInfo) {
+    fun signIn(accountInfo : AccountInfo) {
         viewModelScope.launch {
-            accountUseCase.signInGoogle(accountInfo)
+            accountUseCase.signIn(accountInfo)
         }
     }
 
-    fun signOutGoogle() {
+    fun signOut() {
         viewModelScope.launch {
-            accountUseCase.signOutGoogle()
+            accountUseCase.signOut()
         }
     }
 

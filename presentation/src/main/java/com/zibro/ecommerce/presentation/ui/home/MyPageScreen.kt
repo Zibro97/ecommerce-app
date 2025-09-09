@@ -2,6 +2,7 @@ package com.zibro.ecommerce.presentation.ui.home
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,8 +26,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.model.ClientError
+import com.kakao.sdk.common.model.ClientErrorCause
+import com.kakao.sdk.user.UserApiClient
 import com.zibro.ecommerce.domain.model.AccountInfo
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
 
@@ -50,6 +54,16 @@ fun MyPageScreen(
             }
         }
     }
+    val kakaoCallback : (OAuthToken?, Throwable?) -> Unit = { token, error ->
+        when {
+            error != null -> {
+                Log.e("Kakao", "카카오 계정 로그인 실패", error)
+            }
+            token != null -> {
+                loginWithKakaoNickName(token, viewModel)
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -70,8 +84,17 @@ fun MyPageScreen(
 
                 Button(
                     onClick = {
-                        viewModel.signOutGoogle()
-                        firebaseAuth.signOut()
+                        viewModel.signOut()
+                        when(accountInfo?.type) {
+                            AccountInfo.Type.KAKAO -> {
+                                UserApiClient.instance.logout {
+
+                                }
+                            }
+                            else -> {
+                                firebaseAuth.signOut()
+                            }
+                        }
                     }
                 ) {
                     Text("로그아웃")
@@ -84,11 +107,54 @@ fun MyPageScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "로그인")
+                Text(text = "구글 로그인")
+            }
+
+            Button(
+                onClick = {
+                    loginWithKakao(context, kakaoCallback)
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "카카오 로그인")
             }
         }
     }
+}
 
+private fun loginWithKakaoNickName(
+    token : OAuthToken,
+    viewModel : MainViewModel
+) {
+    UserApiClient.instance.me { user, error ->
+        when {
+            error != null -> {
+                Log.e("kakao", "사용자 정보 요청 실패", error)
+            }
+            user != null -> {
+                viewModel.signIn(AccountInfo(token.accessToken, user.properties?.get("nickname").orEmpty() , AccountInfo.Type.KAKAO))
+            }
+        }
+    }
+}
+
+private fun loginWithKakao(context : Context, kakaoCallback: (OAuthToken?, Throwable?) -> Unit) {
+    if(UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
+        //카카오톡 설치
+        UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
+            if(error != null) {
+                Log.e("kakao", "카카오톡 로그인 실패", error)
+            }
+            if(error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                return@loginWithKakaoTalk
+            }
+
+            UserApiClient.instance.loginWithKakaoAccount(context, callback = kakaoCallback)
+        }
+    } else {
+        //카카오톡 미설치
+        UserApiClient.instance.loginWithKakaoAccount(context, callback = kakaoCallback)
+    }
 }
 
 private fun handleSignInResult(
@@ -103,7 +169,7 @@ private fun handleSignInResult(
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(context as Activity) { task ->
                 if (task.isSuccessful) {
-                    viewModel.signInGoogle(
+                    viewModel.signIn(
                         AccountInfo(
                             account.idToken.orEmpty(),
                             account.displayName.orEmpty(),
@@ -111,7 +177,7 @@ private fun handleSignInResult(
                         )
                     )
                 } else {
-                    viewModel.signOutGoogle()
+                    viewModel.signOut()
                     firebaseAuth.signOut()
                 }
             }

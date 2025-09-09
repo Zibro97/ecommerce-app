@@ -51,6 +51,8 @@ dependencies {
 
     implementation(libs.gson)
 
+    implementation(libs.v2.user)
+
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
