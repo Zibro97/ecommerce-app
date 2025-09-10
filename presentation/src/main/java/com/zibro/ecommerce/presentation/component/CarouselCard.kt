@@ -2,6 +2,7 @@ package com.zibro.ecommerce.presentation.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.aspectRatio
@@ -13,7 +14,12 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,6 +33,7 @@ import androidx.navigation.NavHostController
 import com.zibro.ecommerce.domain.model.Product
 import com.zibro.ecommerce.presentation.R
 import com.zibro.ecommerce.presentation.model.CarouselVM
+import com.zibro.ecommerce.presentation.model.PresentationVM
 
 @Composable
 fun CarouselCard(
@@ -50,6 +57,7 @@ fun CarouselCard(
             items(presentationVM.model.productList.size) { productIndex ->
                 CarouselProductCard(
                     product = presentationVM.model.productList[productIndex],
+                    presentationVM
                 ) {
                     presentationVM.openCarouselProduct(navHostController,it)
                 }
@@ -59,7 +67,11 @@ fun CarouselCard(
 }
 
 @Composable
-private fun CarouselProductCard(product : Product, onClick : (Product) -> Unit) {
+private fun CarouselProductCard(
+    product : Product,
+    presentationVM : CarouselVM,
+    onClick : (Product) -> Unit
+) {
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
@@ -69,26 +81,38 @@ private fun CarouselProductCard(product : Product, onClick : (Product) -> Unit) 
             .padding(10.dp),
         onClick = { onClick(product) }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.product_image),
-                "description",
-                contentScale = ContentScale.Crop,
+        Box(modifier = Modifier.fillMaxWidth()) {
+            IconButton(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                onClick = { presentationVM.likeProduct(product) }
+            ) {
+                Icon(
+                    if (product.isLike) Icons.Filled.Favorite
+                    else Icons.Outlined.FavoriteBorder,
+                    "FavoriteIcon"
+                )
+            }
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(1f)
-            )
-            Text(
-                fontSize = 14.sp,
-                text = product.productName
-            )
-            Price(product)
+                    .padding(10.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.product_image),
+                    "description",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                )
+                Text(
+                    fontSize = 14.sp,
+                    text = product.productName
+                )
+                Price(product)
+            }
         }
     }
 }

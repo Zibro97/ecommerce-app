@@ -2,6 +2,7 @@ package com.zibro.ecommerce.presentation.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.aspectRatio
@@ -9,7 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,6 +41,7 @@ import com.zibro.ecommerce.presentation.R
 import com.zibro.ecommerce.presentation.delegate.ProductDelegate
 import com.zibro.ecommerce.presentation.model.ProductVM
 import com.zibro.ecommerce.presentation.ui.theme.Purple80
+import java.nio.file.WatchEvent
 
 @Composable
 fun ProductCard(navHostController: NavHostController, presentationVM: ProductVM) {
@@ -49,31 +56,43 @@ fun ProductCard(navHostController: NavHostController, presentationVM: ProductVM)
             presentationVM.openProduct(navHostController, presentationVM.model)
         }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.product_image),
-                "description",
-                contentScale = ContentScale.Crop,
+        Box(modifier = Modifier.fillMaxWidth()) {
+            IconButton(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                onClick = { presentationVM.likeProduct(presentationVM.model) }
+            ) {
+                Icon(
+                    if (presentationVM.model.isLike) Icons.Filled.Favorite
+                    else Icons.Outlined.FavoriteBorder,
+                    "FavoriteIcon"
+                )
+            }
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(1f)
-            )
-            Text(
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                text = presentationVM.model.shop.shopName
-            )
-            Text(
-                fontSize = 14.sp,
-                text = presentationVM.model.productName
-            )
-            Price(presentationVM.model)
+                    .padding(10.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.product_image),
+                    "description",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                )
+                Text(
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    text = presentationVM.model.shop.shopName
+                )
+                Text(
+                    fontSize = 14.sp,
+                    text = presentationVM.model.productName
+                )
+                Price(presentationVM.model)
+            }
         }
     }
 }
@@ -129,11 +148,12 @@ private fun PreviewProductCard() {
                 shop = Shop("1001", "패캠샵", ""),
                 isNew = true,
                 isFreeShipping = false,
+                isLike = false
             ),
             object : ProductDelegate {
-                override fun openProduct(navController: NavHostController, product: Product) {
-                    TODO("Not yet implemented")
-                }
+                override fun openProduct(navController: NavHostController, product: Product) {}
+
+                override fun likeProduct(product: Product) {}
             }
         )
     )
@@ -154,12 +174,12 @@ private fun PreviewProductCardDisCount() {
                 shop = Shop("1001", "패캠샵", ""),
                 isNew = true,
                 isFreeShipping = false,
+                isLike = false,
             ),
             object : ProductDelegate {
-                override fun openProduct(navController: NavHostController, product: Product) {
-                    TODO("Not yet implemented")
-                }
+                override fun openProduct(navController: NavHostController, product: Product) {}
 
+                override fun likeProduct(product: Product) {}
             }
         )
     )
@@ -180,12 +200,11 @@ private fun PreviewProductCardSoldOut() {
                 shop = Shop("1001", "패캠샵", ""),
                 isNew = true,
                 isFreeShipping = false,
+                isLike = true
             ),
             object : ProductDelegate {
-                override fun openProduct(navController: NavHostController, product: Product) {
-                    TODO("Not yet implemented")
-                }
-
+                override fun openProduct(navController: NavHostController, product: Product) {}
+                override fun likeProduct(product: Product) {}
             }
         )
     )

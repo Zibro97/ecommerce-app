@@ -5,4 +5,6 @@ import com.zibro.ecommerce.domain.model.Product
 
 interface ProductDelegate {
     fun openProduct(navController: NavHostController, product : Product)
+
+    fun likeProduct(product: Product)
 }

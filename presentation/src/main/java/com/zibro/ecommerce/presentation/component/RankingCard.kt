@@ -1,6 +1,8 @@
 package com.zibro.ecommerce.presentation.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -8,8 +10,14 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -45,13 +53,13 @@ fun RankingCard(navHostController: NavHostController, presentationVM : RankingVM
         ) { idx ->
             Column {
                 val product = presentationVM.model.productList[idx * 3]
-                RankingProductCard(index = idx * 3, product = product) {
+                RankingProductCard(index = idx * 3, product = product, presentationVM) {
                     presentationVM.openRankingProduct(navController = navHostController,product = product)
                 }
-                RankingProductCard(index = idx * 3 + 1, product = product) {
+                RankingProductCard(index = idx * 3 + 1, product = product, presentationVM) {
                     presentationVM.openRankingProduct(navController = navHostController,product = product)
                 }
-                RankingProductCard(index = idx * 3 + 2, product = product) {
+                RankingProductCard(index = idx * 3 + 2, product = product, presentationVM) {
                     presentationVM.openRankingProduct(navController = navHostController,product = product)
                 }
             }
@@ -60,39 +68,52 @@ fun RankingCard(navHostController: NavHostController, presentationVM : RankingVM
 }
 
 @Composable
-fun RankingProductCard(index: Int, product: Product, onClick: (Ranking) -> Unit) {
-    Row(
-        modifier = Modifier
-            .padding(10.dp)
-            .fillMaxWidth()
-    ) {
-        Text(
-            text = "${index+1}",
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 10.dp)
-        )
-        Image(
-            painter = painterResource(R.drawable.product_image),
-            "description",
-            contentScale = ContentScale.Crop,
+fun RankingProductCard(index: Int, product: Product, presentationVM: RankingVM, onClick: (Product) -> Unit) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        IconButton(
+            modifier = Modifier.align(Alignment.BottomEnd),
+            onClick = { presentationVM.likeProduct(product) }
+        ) {
+            Icon(
+                if (product.isLike) Icons.Filled.Favorite
+                else Icons.Outlined.FavoriteBorder,
+                "FavoriteIcon"
+            )
+        }
+        Row(
             modifier = Modifier
-                .width(70.dp)
-                .aspectRatio(0.7f)
-        )
-        Column(modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)) {
+                .padding(10.dp)
+                .fillMaxWidth()
+        ) {
             Text(
-                fontSize = 14.sp,
-                text = product.shop.shopName,
-                modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)
+                text = "${index+1}",
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 10.dp)
             )
-
-            Text(
-                fontSize = 14.sp,
-                text = product.productName,
-                modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)
+            Image(
+                painter = painterResource(R.drawable.product_image),
+                "description",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .width(70.dp)
+                    .aspectRatio(0.7f)
+                    .clickable { onClick(product) }
             )
+            Column(modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)) {
+                Text(
+                    fontSize = 14.sp,
+                    text = product.shop.shopName,
+                    modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)
+                )
 
-            Price(product = product)
+                Text(
+                    fontSize = 14.sp,
+                    text = product.productName,
+                    modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)
+                )
+
+                Price(product = product)
+            }
         }
     }
 }

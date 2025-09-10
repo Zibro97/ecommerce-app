@@ -3,6 +3,7 @@ package com.zibro.ecommerce.di
 import android.content.Context
 import androidx.room.Room
 import com.zibro.ecommerce.data.db.AppDatabase
+import com.zibro.ecommerce.data.db.dao.LikeDao
 import com.zibro.ecommerce.data.db.dao.SearchDao
 import dagger.Module
 import dagger.Provides
@@ -33,6 +34,14 @@ object DatabaseModule {
         database: AppDatabase
     ) : SearchDao {
         return database.searchDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLikeDao(
+        database: AppDatabase
+    ) : LikeDao {
+        return database.likeDao()
     }
 
 }

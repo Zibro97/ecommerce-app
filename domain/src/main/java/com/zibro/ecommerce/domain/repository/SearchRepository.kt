@@ -12,4 +12,6 @@ interface SearchRepository {
     ) : Flow<List<Product>>
 
     fun getSearchKeywords() : Flow<List<SearchKeyword>>
+
+    suspend fun likeProduct(product: Product)
 }
