@@ -55,7 +55,7 @@ class SearchRepositoryImpl @Inject constructor(
         if(product.isLike) {
             likeDao.deleteLike(product.productId)
         } else {
-            likeDao.insertLike(product.toLikeProductEntity())
+            likeDao.insertLike(product.toLikeProductEntity().copy(isLike = true))
         }
     }
 

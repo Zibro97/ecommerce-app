@@ -13,6 +13,7 @@ import com.zibro.ecommerce.domain.model.Product
 import com.zibro.ecommerce.domain.model.Ranking
 import com.zibro.ecommerce.domain.usecase.AccountUseCase
 import com.zibro.ecommerce.domain.usecase.CategoryUseCase
+import com.zibro.ecommerce.domain.usecase.LikeUseCase
 import com.zibro.ecommerce.domain.usecase.MainUseCase
 import com.zibro.ecommerce.presentation.delegate.BannerDelegate
 import com.zibro.ecommerce.presentation.delegate.CategoryDelegate
@@ -35,14 +36,16 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val mainUseCase: MainUseCase,
-    categoryUseCase: CategoryUseCase,
-    private val accountUseCase: AccountUseCase
+    private val categoryUseCase: CategoryUseCase,
+    private val accountUseCase: AccountUseCase,
+    private val likeUseCase: LikeUseCase
 ) : ViewModel(), ProductDelegate, BannerDelegate, CategoryDelegate {
     private val _columnCount = MutableStateFlow(DEFAULT_COLUMN_COUNT)
     val columnCount : StateFlow<Int> = _columnCount
 
     val modelList = mainUseCase().map(::convertToPresentationVM)
     val categoryList = categoryUseCase.getCategory()
+    val likeProducts = likeUseCase().map(::convertToPresentationVM)
     val accountInfo = accountUseCase.getAccountInfo()
 
     fun openSearchForm(

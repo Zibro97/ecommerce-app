@@ -31,6 +31,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.gson.Gson
 import com.zibro.ecommerce.domain.model.Category
 import com.zibro.ecommerce.presentation.ui.category.CategoryInfoScreen
+import com.zibro.ecommerce.presentation.ui.home.LikeScreen
 import com.zibro.ecommerce.presentation.ui.home.MainCategoryScreen
 import com.zibro.ecommerce.presentation.ui.home.MainHomeScreen
 import com.zibro.ecommerce.presentation.ui.home.MyPageScreen
@@ -40,7 +41,7 @@ import com.zibro.ecommerce.presentation.ui.theme.EcommerceAppTheme
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
 
 @Composable
-fun MainScreen(googleSignInClient : GoogleSignInClient) {
+fun MainScreen(googleSignInClient: GoogleSignInClient) {
     val viewModel = hiltViewModel<MainViewModel>()
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -49,7 +50,7 @@ fun MainScreen(googleSignInClient : GoogleSignInClient) {
 
     Scaffold(
         topBar = {
-            if(NavigationItem.MainNav.isMainRoute(currentRoute)){
+            if (NavigationItem.MainNav.isMainRoute(currentRoute)) {
                 MainHeader(
                     viewModel,
                     navController
@@ -58,12 +59,12 @@ fun MainScreen(googleSignInClient : GoogleSignInClient) {
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
-            if(NavigationItem.MainNav.isMainRoute(currentRoute)) {
+            if (NavigationItem.MainNav.isMainRoute(currentRoute)) {
                 MainBottomNavigationBar(navController, currentRoute)
             }
         }
     ) { innerPadding ->
-        MainNavigationScreen(viewModel,navController, innerPadding, googleSignInClient)
+        MainNavigationScreen(viewModel, navController, innerPadding, googleSignInClient)
     }
 }
 
@@ -88,16 +89,17 @@ fun MainHeader(
 
 @Composable
 fun MainBottomNavigationBar(
-    navController : NavHostController,
-    currentRoute : String?
+    navController: NavHostController,
+    currentRoute: String?
 ) {
     val bottomNavigationItems = listOf(
         NavigationItem.MainNav.Home,
         NavigationItem.MainNav.Category,
         NavigationItem.MainNav.MyPage,
+        NavigationItem.MainNav.Like,
     )
 
-    NavigationBar{
+    NavigationBar {
 
         bottomNavigationItems.forEach { item ->
             NavigationBarItem(
@@ -123,9 +125,9 @@ fun MainBottomNavigationBar(
 @Composable
 fun MainNavigationScreen(
     mainViewModel: MainViewModel,
-    navController : NavHostController,
-    innerPadding : PaddingValues,
-    googleSignInClient : GoogleSignInClient
+    navController: NavHostController,
+    innerPadding: PaddingValues,
+    googleSignInClient: GoogleSignInClient
 ) {
     NavHost(
         modifier = Modifier.padding(innerPadding),
@@ -133,13 +135,16 @@ fun MainNavigationScreen(
         startDestination = NavigationRouteName.MAIN_HOME,
     ) {
         composable(NavigationRouteName.MAIN_HOME) {
-            MainHomeScreen(navController = navController,viewModel = mainViewModel)
+            MainHomeScreen(navController = navController, viewModel = mainViewModel)
         }
         composable(NavigationRouteName.MAIN_CATEGORY) {
             MainCategoryScreen(viewModel = mainViewModel, navController)
         }
         composable(NavigationRouteName.MAIN_MY_PAGE) {
             MyPageScreen(viewModel = mainViewModel, googleSignInClient = googleSignInClient)
+        }
+        composable(NavigationRouteName.MAIN_LIKE) {
+            LikeScreen(navHostController = navController, viewModel = mainViewModel)
         }
         composable(
             NavigationRouteName.CATEGORY + "/{category}",
@@ -148,7 +153,7 @@ fun MainNavigationScreen(
             val categoryString = it.arguments?.getString("category")
             val category = Gson().fromJson(categoryString, Category::class.java)
 
-            if(category != null) {
+            if (category != null) {
                 CategoryInfoScreen(
                     navHostController = navController,
                     category = category
@@ -161,7 +166,7 @@ fun MainNavigationScreen(
         ) {
             val productString = it.arguments?.getString("product")
 
-            if(productString != null) {
+            if (productString != null) {
                 ProductDetailScreen(productString)
             }
         }
