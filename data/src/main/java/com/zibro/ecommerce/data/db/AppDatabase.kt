@@ -18,7 +18,7 @@ import com.zibro.ecommerce.data.db.entity.SearchKeywordEntity
         PurchaseProductEntity::class,
         SearchKeywordEntity::class
     ],
-    version = 1,
+    version = 2,
 )
 abstract class AppDatabase : RoomDatabase() {
 

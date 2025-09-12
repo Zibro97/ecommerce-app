@@ -17,7 +17,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,11 +35,12 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.zibro.ecommerce.presentation.R
 import com.zibro.ecommerce.presentation.ui.theme.Purple80
+import com.zibro.ecommerce.presentation.util.NumberUtils
 import com.zibro.ecommerce.presentation.viewmodel.product_detail.ProductDetailViewModel
 
 @Composable
 fun ProductDetailScreen(
-    productId : String,
+    productId: String,
     viewModel: ProductDetailViewModel = hiltViewModel()
 ) {
     val product by viewModel.product.collectAsState()
@@ -55,7 +59,8 @@ fun ProductDetailScreen(
             Image(
                 painter = painterResource(R.drawable.product_image),
                 contentDescription = "Product Image",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .height(250.dp)
                     .align(Alignment.Center),
                 contentScale = ContentScale.Crop
@@ -65,7 +70,8 @@ fun ProductDetailScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         Card(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .weight(2f),
             elevation = 0.dp,
             shape = RoundedCornerShape(topEnd = 20.dp, topStart = 20.dp)
@@ -74,10 +80,7 @@ fun ProductDetailScreen(
                 modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.Top
             ) {
-                Row(
-                    modifier = Modifier.padding(10.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Card(
                         modifier = Modifier.size(50.dp),
                         shape = CircleShape
@@ -89,19 +92,21 @@ fun ProductDetailScreen(
                             contentScale = ContentScale.Crop
                         )
                     }
-                    Spacer(modifier = Modifier.width(10.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "${product?.shop?.shopName}에서 판매중인 상품",
+                        text = "${product?.shop?.shopName}",
                         fontSize = 16.sp
                     )
                 }
+                Spacer(modifier = Modifier.height(20.dp))
+
                 Text(
                     text = "${product?.productName}",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 Text(
                     text = "${product?.productName}의 상품 상세 페이지 설명란",
@@ -110,12 +115,14 @@ fun ProductDetailScreen(
             }
         }
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(16.dp),
-            verticalAlignment = Alignment.Bottom
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "${product?.price?.finalPrice}",
+                text = "${NumberUtils.numberFormatPrice(product?.price?.finalPrice)} 원",
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp
             )
@@ -127,19 +134,29 @@ fun ProductDetailScreen(
             Button(
                 onClick = {
                     /* 구매 버튼 클릭 이벤트 처리 */
-                    viewModel.addCard(productId)
+                    viewModel.addBasket(product)
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Purple80
                 ),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text(
-                    "카트에 담기",
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(5.dp),
-                    fontSize = 16.sp,
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Filled.ShoppingCart,
+                        contentDescription = "장바구니 담기",
+                    )
+
+                    Text(
+                        "장바구니 담기",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(5.dp),
+                        fontSize = 16.sp,
+                    )
+                }
             }
         }
     }
