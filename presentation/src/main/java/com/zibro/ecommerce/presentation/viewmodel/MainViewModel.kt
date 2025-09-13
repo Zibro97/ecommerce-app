@@ -2,6 +2,7 @@ package com.zibro.ecommerce.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.zibro.ecommerce.domain.model.AccountInfo
 import com.zibro.ecommerce.domain.model.Banner
@@ -52,6 +53,12 @@ class MainViewModel @Inject constructor(
         navController: NavHostController
     ) {
         NavigationUtils.navigate(navController, NavigationRouteName.SEARCH)
+    }
+
+    fun openBasket(
+        navController: NavHostController
+    ) {
+        NavigationUtils.navigate(navController, NavigationRouteName.BASKET)
     }
 
     fun signIn(accountInfo : AccountInfo) {

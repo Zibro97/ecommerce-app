@@ -1,12 +1,14 @@
 package com.zibro.ecommerce.di
 
 import com.zibro.ecommerce.data.repository.AccountRepositoryImpl
+import com.zibro.ecommerce.data.repository.BasketRepositoryImpl
 import com.zibro.ecommerce.data.repository.CategoryRepositoryImpl
 import com.zibro.ecommerce.data.repository.LikeRepositoryImpl
 import com.zibro.ecommerce.data.repository.MainRepositoryImpl
 import com.zibro.ecommerce.data.repository.ProductDetailRepositoryImpl
 import com.zibro.ecommerce.data.repository.SearchRepositoryImpl
 import com.zibro.ecommerce.domain.repository.AccountRepository
+import com.zibro.ecommerce.domain.repository.BasketRepository
 import com.zibro.ecommerce.domain.repository.CategoryRepository
 import com.zibro.ecommerce.domain.repository.LikeRepository
 import com.zibro.ecommerce.domain.repository.MainRepository
@@ -56,4 +58,10 @@ interface DataModule {
     fun bindLikeRepository(
         likeRepositoryImpl: LikeRepositoryImpl
     ) : LikeRepository
+
+    @Binds
+    @Singleton
+    fun bindBasketRepository(
+        basketRepositoryImpl: BasketRepositoryImpl
+    ) : BasketRepository
 }

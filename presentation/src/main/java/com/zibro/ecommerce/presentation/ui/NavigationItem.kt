@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.zibro.ecommerce.domain.model.Category
 import com.zibro.ecommerce.domain.model.Product
+import com.zibro.ecommerce.presentation.ui.NavigationRouteName.BASKET
 import com.zibro.ecommerce.presentation.ui.NavigationRouteName.CATEGORY
 import com.zibro.ecommerce.presentation.ui.NavigationRouteName.MAIN_CATEGORY
 import com.zibro.ecommerce.presentation.ui.NavigationRouteName.MAIN_HOME
@@ -48,6 +49,8 @@ sealed class NavigationItem(open val route: String) {
     ) : NavigationItem(PRODUCT_DETAIL)
 
     object SearchNav : NavigationItem(SEARCH)
+
+    object BasketNav : NavigationItem(BASKET)
 }
 
 object NavigationRouteName {
@@ -58,4 +61,6 @@ object NavigationRouteName {
     const val CATEGORY = "category"
     const val PRODUCT_DETAIL = "product_detail"
     const val SEARCH = "search"
+
+    const val BASKET = "basket"
 }
