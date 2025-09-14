@@ -25,6 +25,7 @@ import com.zibro.ecommerce.presentation.model.CarouselVM
 import com.zibro.ecommerce.presentation.model.PresentationVM
 import com.zibro.ecommerce.presentation.model.ProductVM
 import com.zibro.ecommerce.presentation.model.RankingVM
+import com.zibro.ecommerce.presentation.ui.CategoryNav
 import com.zibro.ecommerce.presentation.ui.NavigationRouteName
 import com.zibro.ecommerce.presentation.util.NavigationUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -106,10 +107,9 @@ class MainViewModel @Inject constructor(
     }
 
     override fun openCategory(navController: NavHostController, category: Category) {
-        NavigationUtils.navigate(
+        NavigationUtils.navigateV2(
             navController,
-            NavigationRouteName.CATEGORY,
-            category
+            CategoryNav.navigateWithArg(category)
         )
     }
 

@@ -33,9 +33,25 @@ object NavigationUtils {
         controller.navigate("$routeName$argument") {
             if(backStackRouteName != null) {
                 popUpTo(backStackRouteName) { saveState = true }
-                launchSingleTop = isLaunchSingleTop
-                restoreState = needToRestoreState
             }
+            launchSingleTop = isLaunchSingleTop
+            restoreState = needToRestoreState
+        }
+    }
+
+    fun navigateV2(
+        controller : NavHostController,
+        routeName : String,
+        backStackRouteName : String? = null,
+        isLaunchSingleTop : Boolean = true,
+        needToRestoreState : Boolean = true
+    ) {
+        controller.navigate(routeName) {
+            if(backStackRouteName != null) {
+                popUpTo(backStackRouteName) { saveState = true }
+            }
+            launchSingleTop = isLaunchSingleTop
+            restoreState = needToRestoreState
         }
     }
 }
