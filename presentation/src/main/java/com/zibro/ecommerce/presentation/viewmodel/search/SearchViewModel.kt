@@ -9,7 +9,7 @@ import com.zibro.ecommerce.domain.model.SearchKeyword
 import com.zibro.ecommerce.domain.usecase.SearchUseCase
 import com.zibro.ecommerce.presentation.delegate.ProductDelegate
 import com.zibro.ecommerce.presentation.model.ProductVM
-import com.zibro.ecommerce.presentation.ui.NavigationRouteName
+import com.zibro.ecommerce.presentation.ui.ProductDetailNav
 import com.zibro.ecommerce.presentation.util.NavigationUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,7 +65,10 @@ class SearchViewModel @Inject constructor(
     }
 
     override fun openProduct(navController: NavHostController, product: Product) {
-        NavigationUtils.navigate(navController, NavigationRouteName.PRODUCT_DETAIL, product)
+        NavigationUtils.navigate(
+            navController,
+            ProductDetailNav.navigateWithArg(product.productId)
+        )
     }
 
     override fun likeProduct(product: Product) {

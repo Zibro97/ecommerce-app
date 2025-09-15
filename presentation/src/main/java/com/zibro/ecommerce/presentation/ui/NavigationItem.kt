@@ -25,34 +25,53 @@ import com.zibro.ecommerce.presentation.ui.NavigationRouteName.PRODUCT_DETAIL
 import com.zibro.ecommerce.presentation.ui.NavigationRouteName.SEARCH
 import com.zibro.ecommerce.presentation.util.GsonUtils
 
-sealed class NavigationItem(open val route: String) {
-    sealed class MainNav(
-        override val route: String,
-        val name: String,
-        val icon: ImageVector
-    ) : NavigationItem(route) {
-        data object Home : MainNav(MAIN_HOME, MAIN_HOME, Icons.Filled.Home)
-        data object Category : MainNav(MAIN_CATEGORY, MAIN_CATEGORY, Icons.Filled.Star)
-        data object MyPage : MainNav(MAIN_MY_PAGE, MAIN_MY_PAGE, Icons.Filled.Person)
-        data object Like : MainNav(MAIN_LIKE, MAIN_LIKE, Icons.Filled.Favorite)
 
-        companion object {
-            fun isMainRoute(route: String?): Boolean {
-                return when(route) {
-                    MAIN_HOME, MAIN_CATEGORY, MAIN_MY_PAGE, MAIN_LIKE -> true
-                    else -> false
-                }
+sealed class MainNav(
+    override val route: String,
+    val icon: ImageVector,
+    override val title : String
+) : Destination {
+    data object Home : MainNav(route = MAIN_HOME, title = NavigationTitle.MAIN_HOME, icon = Icons.Filled.Home)
+    data object Category : MainNav(route = MAIN_CATEGORY, title = NavigationTitle.MAIN_CATEGORY, icon = Icons.Filled.Star)
+    data object MyPage : MainNav(route = MAIN_MY_PAGE, title = NavigationTitle.MAIN_MY_PAGE, icon = Icons.Filled.Person)
+    data object Like : MainNav(route = MAIN_LIKE, title = NavigationTitle.MAIN_LIKE, icon = Icons.Filled.Favorite)
+
+    override val deepLinks: List<NavDeepLink> = listOf(
+        navDeepLink { uriPattern = "$DEEP_LINK_SCHEME$route" }
+    )
+
+    companion object {
+        fun isMainRoute(route: String?): Boolean {
+            return when(route) {
+                MAIN_HOME, MAIN_CATEGORY, MAIN_MY_PAGE, MAIN_LIKE -> true
+                else -> false
             }
         }
     }
+}
 
-    sealed class ProductDetailNav(
-        val product : Product
-    ) : NavigationItem(PRODUCT_DETAIL)
+object SearchNav : Destination {
+    override val route: String
+        get() = NavigationRouteName.SEARCH
+    override val title: String
+        get() = NavigationRouteName.SEARCH
+    override val deepLinks: List<NavDeepLink>
+        get() = listOf(
+            navDeepLink { uriPattern = "$DEEP_LINK_SCHEME$route" }
+        )
 
-    object SearchNav : NavigationItem(SEARCH)
+}
 
-    object BasketNav : NavigationItem(BASKET)
+object BasketNav : Destination {
+    override val route: String
+        get() = NavigationRouteName.BASKET
+    override val title: String
+        get() = NavigationRouteName.BASKET
+    override val deepLinks: List<NavDeepLink>
+        get() = listOf(
+            navDeepLink { uriPattern = "$DEEP_LINK_SCHEME$route" }
+        )
+
 }
 
 object CategoryNav : DestinationArgs<Category> {
@@ -73,6 +92,30 @@ object CategoryNav : DestinationArgs<Category> {
 
     override val title: String = NavigationTitle.CATEGORY
     override val route: String = NavigationRouteName.CATEGORY
+    override val deepLinks: List<NavDeepLink> = listOf(
+        navDeepLink { uriPattern = "$DEEP_LINK_SCHEME$route/{$argName}" }
+    )
+
+}
+
+object ProductDetailNav : DestinationArgs<String> {
+    override val argName: String = "productId"
+    override val arguments: List<NamedNavArgument> = listOf(
+        navArgument(argName) { type = NavType.StringType }
+    )
+
+    override fun navigateWithArg(item: String): String {
+        val arg = GsonUtils.toJson(item)
+        return "$route/{$arg}"
+    }
+
+    override fun findArgument(navBackStackEntry: NavBackStackEntry): String? {
+        val categoryString = navBackStackEntry.arguments?.getString(argName)
+        return GsonUtils.fromJson(categoryString)
+    }
+
+    override val title: String = NavigationTitle.PRODUCT_DETAIL
+    override val route: String = NavigationRouteName.PRODUCT_DETAIL
     override val deepLinks: List<NavDeepLink> = listOf(
         navDeepLink { uriPattern = "$DEEP_LINK_SCHEME$route/{$argName}" }
     )

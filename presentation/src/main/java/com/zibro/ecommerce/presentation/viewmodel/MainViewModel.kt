@@ -2,7 +2,6 @@ package com.zibro.ecommerce.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.zibro.ecommerce.domain.model.AccountInfo
 import com.zibro.ecommerce.domain.model.Banner
@@ -25,8 +24,10 @@ import com.zibro.ecommerce.presentation.model.CarouselVM
 import com.zibro.ecommerce.presentation.model.PresentationVM
 import com.zibro.ecommerce.presentation.model.ProductVM
 import com.zibro.ecommerce.presentation.model.RankingVM
+import com.zibro.ecommerce.presentation.ui.BasketNav
 import com.zibro.ecommerce.presentation.ui.CategoryNav
-import com.zibro.ecommerce.presentation.ui.NavigationRouteName
+import com.zibro.ecommerce.presentation.ui.ProductDetailNav
+import com.zibro.ecommerce.presentation.ui.SearchNav
 import com.zibro.ecommerce.presentation.util.NavigationUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,13 +54,13 @@ class MainViewModel @Inject constructor(
     fun openSearchForm(
         navController: NavHostController
     ) {
-        NavigationUtils.navigate(navController, NavigationRouteName.SEARCH)
+        NavigationUtils.navigate(navController, SearchNav.route)
     }
 
     fun openBasket(
         navController: NavHostController
     ) {
-        NavigationUtils.navigate(navController, NavigationRouteName.BASKET)
+        NavigationUtils.navigate(navController, BasketNav.route)
     }
 
     fun signIn(accountInfo : AccountInfo) {
@@ -84,7 +85,7 @@ class MainViewModel @Inject constructor(
         navController: NavHostController,
         product: Product
     ) {
-        NavigationUtils.navigate(navController, NavigationRouteName.PRODUCT_DETAIL, product)
+        NavigationUtils.navigate(navController, ProductDetailNav.navigateWithArg(product.productId))
     }
 
     override fun likeProduct(product: Product) {
@@ -107,7 +108,7 @@ class MainViewModel @Inject constructor(
     }
 
     override fun openCategory(navController: NavHostController, category: Category) {
-        NavigationUtils.navigateV2(
+        NavigationUtils.navigate(
             navController,
             CategoryNav.navigateWithArg(category)
         )
