@@ -2,7 +2,9 @@ package com.zibro.ecommerce.presentation.ui
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,7 +16,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -72,9 +73,24 @@ fun MainHeader(
     currentRoute: String?
 ) {
     TopAppBar(
-        title = { Text("Ecommerce App") },
+        title = {
+            Text(NavigationUtils.findDestination(currentRoute).title)
+        },
+        navigationIcon = if(!MainNav.isMainRoute(currentRoute)) {
+            {
+                IconButton(
+                    onClick = {
+                        navController.popBackStack()
+                    }
+                ) {
+                    Icon(Icons.Filled.ArrowBack, contentDescription = "backButton")
+                }
+            }
+        } else {
+            null
+        },
         actions = {
-            if(MainNav.isMainRoute(currentRoute)) {
+            if (MainNav.isMainRoute(currentRoute)) {
                 IconButton(
                     onClick = { viewModel.openSearchForm(navController) }
                 ) {
@@ -133,23 +149,39 @@ fun MainNavigationScreen(
         navController = navController,
         startDestination = MainNav.Home.route,
     ) {
-        composable(MainNav.Home.route) {
+        composable(
+            route = MainNav.Home.route,
+            deepLinks = MainNav.Home.deepLinks
+        ) {
             MainHomeScreen(navController = navController, viewModel = mainViewModel)
         }
-        composable(MainNav.Category.route) {
+        composable(
+            route = MainNav.Category.route,
+            deepLinks = MainNav.Category.deepLinks
+        ) {
             MainCategoryScreen(viewModel = mainViewModel, navController)
         }
-        composable(MainNav.MyPage.route) {
+        composable(
+            route = MainNav.MyPage.route,
+            deepLinks = MainNav.MyPage.deepLinks
+        ) {
             MyPageScreen(viewModel = mainViewModel, googleSignInClient = googleSignInClient)
         }
-        composable(MainNav.Like.route) {
+        composable(
+            route = MainNav.Like.route,
+            deepLinks = MainNav.Like.deepLinks
+        ) {
             LikeScreen(navHostController = navController, viewModel = mainViewModel)
         }
-        composable(BasketNav.route) {
+        composable(
+            route = BasketNav.route,
+            deepLinks = BasketNav.deepLinks
+        ) {
             BasketScreen(navHostController = navController)
         }
         composable(
-            route = SearchNav.route
+            route = SearchNav.route,
+            deepLinks = SearchNav.deepLinks
         ) {
             SearchScreen(navController)
         }
