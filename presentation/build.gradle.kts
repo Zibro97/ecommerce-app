@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.gson)
 
     implementation(libs.v2.user)
+    implementation(libs.coil.compose)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
