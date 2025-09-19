@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.zibro.ecommerce.data.db.AppDatabase
 import com.zibro.ecommerce.data.db.dao.BasketDao
 import com.zibro.ecommerce.data.db.dao.LikeDao
+import com.zibro.ecommerce.data.db.dao.PurchaseHistoryDao
 import com.zibro.ecommerce.data.db.dao.SearchDao
 import dagger.Module
 import dagger.Provides
@@ -51,6 +52,14 @@ object DatabaseModule {
         database: AppDatabase
     ) : BasketDao {
         return database.basketDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providePurchaseHistoryDao(
+        database: AppDatabase
+    ) : PurchaseHistoryDao {
+        return database.purchaseHistoryDao()
     }
 
 }
