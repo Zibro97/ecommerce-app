@@ -4,10 +4,13 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.TypeConverters
+import com.zibro.ecommerce.data.db.converter.PurchaseHistoryConverter
 import com.zibro.ecommerce.data.db.entity.PurchaseHistoryEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
+@TypeConverters(PurchaseHistoryConverter::class)
 interface PurchaseHistoryDao {
 
     @Query("SELECT * FROM history")

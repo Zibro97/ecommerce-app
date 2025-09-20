@@ -74,6 +74,18 @@ object BasketNav : Destination {
 
 }
 
+object PurchaseHistoryNav : Destination {
+    override val route: String
+        get() = NavigationRouteName.PURCHASE_HISTORY
+    override val title: String
+        get() = NavigationRouteName.PURCHASE_HISTORY
+    override val deepLinks: List<NavDeepLink>
+        get() = listOf(
+            navDeepLink { uriPattern = "$DEEP_LINK_SCHEME$route" }
+        )
+
+}
+
 object CategoryNav : DestinationArgs<Category> {
     override val argName: String = "category"
     override val arguments: List<NamedNavArgument> = listOf(
@@ -150,6 +162,7 @@ object NavigationRouteName {
     const val SEARCH = "search"
 
     const val BASKET = "basket"
+    const val PURCHASE_HISTORY = "purchase_history"
 }
 
 object NavigationTitle {
@@ -161,4 +174,5 @@ object NavigationTitle {
     const val PRODUCT_DETAIL = "상품 상세페이지"
     const val SEARCH = "검색"
     const val BASKET = "장바구니"
+    const val PURCHASE_HISTORY = "결제내역"
 }

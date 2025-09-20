@@ -27,6 +27,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.zibro.ecommerce.domain.model.PurchaseHistory
 import com.zibro.ecommerce.presentation.ui.basket.BasketScreen
 import com.zibro.ecommerce.presentation.ui.category.CategoryInfoScreen
 import com.zibro.ecommerce.presentation.ui.home.LikeScreen
@@ -34,6 +35,7 @@ import com.zibro.ecommerce.presentation.ui.home.MainCategoryScreen
 import com.zibro.ecommerce.presentation.ui.home.MainHomeScreen
 import com.zibro.ecommerce.presentation.ui.home.MyPageScreen
 import com.zibro.ecommerce.presentation.ui.product_detail.ProductDetailScreen
+import com.zibro.ecommerce.presentation.ui.purchase_history.PurchaseHistoryScreen
 import com.zibro.ecommerce.presentation.ui.search.SearchScreen
 import com.zibro.ecommerce.presentation.util.NavigationUtils
 import com.zibro.ecommerce.presentation.viewmodel.MainViewModel
@@ -178,6 +180,12 @@ fun MainNavigationScreen(
             deepLinks = BasketNav.deepLinks
         ) {
             BasketScreen(navHostController = navController)
+        }
+        composable(
+            route = PurchaseHistoryNav.route,
+            deepLinks = PurchaseHistoryNav.deepLinks
+        ) {
+            PurchaseHistoryScreen()
         }
         composable(
             route = SearchNav.route,

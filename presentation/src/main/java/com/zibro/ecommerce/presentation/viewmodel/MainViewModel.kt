@@ -10,6 +10,7 @@ import com.zibro.ecommerce.domain.model.BaseModel
 import com.zibro.ecommerce.domain.model.Carousel
 import com.zibro.ecommerce.domain.model.Category
 import com.zibro.ecommerce.domain.model.Product
+import com.zibro.ecommerce.domain.model.PurchaseHistory
 import com.zibro.ecommerce.domain.model.Ranking
 import com.zibro.ecommerce.domain.usecase.AccountUseCase
 import com.zibro.ecommerce.domain.usecase.CategoryUseCase
@@ -27,6 +28,7 @@ import com.zibro.ecommerce.presentation.model.RankingVM
 import com.zibro.ecommerce.presentation.ui.BasketNav
 import com.zibro.ecommerce.presentation.ui.CategoryNav
 import com.zibro.ecommerce.presentation.ui.ProductDetailNav
+import com.zibro.ecommerce.presentation.ui.PurchaseHistoryNav
 import com.zibro.ecommerce.presentation.ui.SearchNav
 import com.zibro.ecommerce.presentation.util.NavigationUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -61,6 +63,12 @@ class MainViewModel @Inject constructor(
         navController: NavHostController
     ) {
         NavigationUtils.navigate(navController, BasketNav.route)
+    }
+
+    fun openPurchaseHistory(
+        navController: NavHostController
+    ) {
+        NavigationUtils.navigate(navController, PurchaseHistoryNav.route)
     }
 
     fun signIn(accountInfo : AccountInfo) {

@@ -7,6 +7,7 @@ import com.zibro.ecommerce.presentation.ui.Destination
 import com.zibro.ecommerce.presentation.ui.MainNav
 import com.zibro.ecommerce.presentation.ui.NavigationRouteName
 import com.zibro.ecommerce.presentation.ui.ProductDetailNav
+import com.zibro.ecommerce.presentation.ui.PurchaseHistoryNav
 import com.zibro.ecommerce.presentation.ui.SearchNav
 
 object NavigationUtils {
@@ -34,6 +35,7 @@ object NavigationUtils {
             NavigationRouteName.MAIN_CATEGORY -> MainNav.Category
             NavigationRouteName.SEARCH -> SearchNav
             NavigationRouteName.BASKET -> BasketNav
+            NavigationRouteName.PURCHASE_HISTORY -> PurchaseHistoryNav
 
             ProductDetailNav.routeWithArgName() -> ProductDetailNav
             CategoryNav.routeWithArgName() -> CategoryNav

@@ -6,6 +6,7 @@ import com.zibro.ecommerce.data.repository.CategoryRepositoryImpl
 import com.zibro.ecommerce.data.repository.LikeRepositoryImpl
 import com.zibro.ecommerce.data.repository.MainRepositoryImpl
 import com.zibro.ecommerce.data.repository.ProductDetailRepositoryImpl
+import com.zibro.ecommerce.data.repository.PurchaseHistoryRepositoryImpl
 import com.zibro.ecommerce.data.repository.SearchRepositoryImpl
 import com.zibro.ecommerce.domain.repository.AccountRepository
 import com.zibro.ecommerce.domain.repository.BasketRepository
@@ -13,6 +14,7 @@ import com.zibro.ecommerce.domain.repository.CategoryRepository
 import com.zibro.ecommerce.domain.repository.LikeRepository
 import com.zibro.ecommerce.domain.repository.MainRepository
 import com.zibro.ecommerce.domain.repository.ProductDetailRepository
+import com.zibro.ecommerce.domain.repository.PurchaseHistoryRepository
 import com.zibro.ecommerce.domain.repository.SearchRepository
 import dagger.Binds
 import dagger.Module
@@ -64,4 +66,10 @@ interface DataModule {
     fun bindBasketRepository(
         basketRepositoryImpl: BasketRepositoryImpl
     ) : BasketRepository
+
+    @Binds
+    @Singleton
+    fun bindPurchaseHistoryRepository(
+        purchaseHistoryRepositoryImpl: PurchaseHistoryRepositoryImpl
+    ) : PurchaseHistoryRepository
 }
