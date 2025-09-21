@@ -10,14 +10,13 @@ import com.zibro.ecommerce.data.db.entity.PurchaseHistoryEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-@TypeConverters(PurchaseHistoryConverter::class)
 interface PurchaseHistoryDao {
 
     @Query("SELECT * FROM history")
     fun getAll() : Flow<List<PurchaseHistoryEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertBasket(item : PurchaseHistoryEntity)
+    suspend fun insert(item : PurchaseHistoryEntity)
 
     @Query("SELECT * FROM history WHERE id=:id")
     suspend fun getBasketById(id : String) : PurchaseHistoryEntity?

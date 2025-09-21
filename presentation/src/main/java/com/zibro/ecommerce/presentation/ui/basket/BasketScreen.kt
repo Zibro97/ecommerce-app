@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -21,8 +22,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -37,16 +40,35 @@ import com.zibro.ecommerce.domain.model.BasketProduct
 import com.zibro.ecommerce.domain.model.Product
 import com.zibro.ecommerce.presentation.R
 import com.zibro.ecommerce.presentation.component.Price
+import com.zibro.ecommerce.presentation.ui.popupSnackBar
 import com.zibro.ecommerce.presentation.ui.theme.Purple80
 import com.zibro.ecommerce.presentation.util.NumberUtils
+import com.zibro.ecommerce.presentation.viewmodel.basket.BasketAction
+import com.zibro.ecommerce.presentation.viewmodel.basket.BasketEvent
 import com.zibro.ecommerce.presentation.viewmodel.basket.BasketViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun BasketScreen(
-    navHostController: NavHostController,
+    scaffoldState : ScaffoldState,
     viewModel: BasketViewModel = hiltViewModel()
 ) {
     val basketProduct by viewModel.basketProduct.collectAsState(listOf())
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collectLatest { event ->
+            when(event) {
+                is BasketEvent.ShowSnackBar -> {
+                    popupSnackBar(
+                        scope,
+                        scaffoldState,
+                        "결제 되었습니다."
+                    )
+                }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -58,7 +80,7 @@ fun BasketScreen(
         ) {
             items(basketProduct.size) { index ->
                 BasketProductCard(basketProduct[index]) {
-                    viewModel.removeBasketProduct(it)
+                    viewModel.dispatch(BasketAction.RemoveProduct(it))
                 }
             }
         }
@@ -69,7 +91,9 @@ fun BasketScreen(
                 backgroundColor = Purple80
             ),
             shape = RoundedCornerShape(12.dp),
-            onClick = { }
+            onClick = {
+                viewModel.dispatch(BasketAction.CheckOutBasket(basketProduct))
+            }
         ) {
             Icon(Icons.Filled.Check, "CheckIcon")
 

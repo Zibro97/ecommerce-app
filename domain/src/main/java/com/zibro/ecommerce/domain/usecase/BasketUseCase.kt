@@ -16,4 +16,8 @@ class BasketUseCase @Inject constructor(
     suspend fun removeBasketProducts(product: Product) {
         basketRepository.removeBasketProduct(product)
     }
+
+    suspend fun checkOutBasket(products: List<BasketProduct>) {
+        basketRepository.checkBasket(products)
+    }
 }

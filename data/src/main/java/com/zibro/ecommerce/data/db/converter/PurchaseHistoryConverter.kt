@@ -18,7 +18,7 @@ class PurchaseHistoryConverter {
     }
 
     @TypeConverter
-    fun toBasketProductList(value: String): BasketProduct {
+    fun toBasketProductList(value: String): List<BasketProduct>? {
         return gson.fromJson(value, object : TypeToken<List<BasketProduct>>() {}.type)
     }
 
