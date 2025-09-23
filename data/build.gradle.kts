@@ -57,7 +57,15 @@ dependencies {
     kapt(libs.androidx.room.compiler)
 
     implementation(libs.gson)
-
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    testImplementation("app.cash.turbine:turbine:1.2.1")
+    testImplementation("com.google.truth:truth:1.1.3")
+    testImplementation("org.mockito:mockito-core:4.8.1")
+    testImplementation("org.mockito:mockito-inline:4.8.1")
+    testImplementation("com.google.dagger:hilt-android-testing:2.57.1")
+    testImplementation("org.robolectric:robolectric:4.10")
+    kaptTest(libs.hilt.android.compiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
