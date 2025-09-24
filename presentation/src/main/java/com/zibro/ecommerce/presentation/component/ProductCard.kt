@@ -145,7 +145,7 @@ private fun PreviewProductCard() {
                 "",
                 price = Price(30000, 30000, SalesStatus.ON_SALE),
                 category = Category.Top,
-                shop = Shop("1001", "패캠샵", ""),
+                shop = Shop("1001", "지브로샵", ""),
                 isNew = true,
                 isFreeShipping = false,
                 isLike = false
@@ -171,7 +171,7 @@ private fun PreviewProductCardDisCount() {
                 "",
                 price = Price(30000, 30000, SalesStatus.ON_DISCOUNT),
                 category = Category.Top,
-                shop = Shop("1001", "패캠샵", ""),
+                shop = Shop("1001", "지브로샵", ""),
                 isNew = true,
                 isFreeShipping = false,
                 isLike = false,
@@ -197,7 +197,7 @@ private fun PreviewProductCardSoldOut() {
                 "",
                 price = Price(30000, 30000, SalesStatus.SOLD_OUT),
                 category = Category.Top,
-                shop = Shop("1001", "패캠샵", ""),
+                shop = Shop("1001", "지브로샵", ""),
                 isNew = true,
                 isFreeShipping = false,
                 isLike = true
